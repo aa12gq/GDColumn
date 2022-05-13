@@ -5,20 +5,19 @@ import (
 	v1 "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/models/user"
 	"net/http"
+	"GDColumn/app/requests"
 
 	"github.com/gin-gonic/gin"
 )
 
+// SignupController 注册控制器
 type SignupController struct {
 	v1.BaseAPIController
 }
 
 func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 
-	type PhoneExistRequest struct {
-		Phone string `json:"phone"`
-	}
-	request := PhoneExistRequest{}
+	request := requests.SignupPhoneExistRequest{}
 
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
@@ -28,7 +27,14 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 		return
 	}
 
-	//  检查数据库并返回响应
+	errs := requests.ValidateSignupPhoneExist(&request, c)
+	if len(errs) > 0 {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+			"errors": errs,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"exist": user.IsPhoneExist(request.Phone),
 	})
