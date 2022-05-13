@@ -1,11 +1,11 @@
+// Package auth 处理用户身份认证相关逻辑
 package auth
 
 import (
-	"fmt"
 	v1 "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/models/user"
-	"net/http"
 	"GDColumn/app/requests"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,22 +16,8 @@ type SignupController struct {
 }
 
 func (sc *SignupController) IsPhoneExist(c *gin.Context) {
-
 	request := requests.SignupPhoneExistRequest{}
-
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"error": err.Error(),
-		})
-		fmt.Println(err.Error())
-		return
-	}
-
-	errs := requests.ValidateSignupPhoneExist(&request, c)
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"errors": errs,
-		})
+	if ok := requests.Validate(c, &request, requests.ValidateSignupPhoneExist); !ok {
 		return
 	}
 
@@ -41,24 +27,10 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 }
 
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
-
 	request := requests.SignupEmailExistRequest{}
-
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"error": err.Error(),
-		})
-		fmt.Println(err.Error())
-	}
-
-	errs := requests.ValidateSignupEmailExist(&request, c)
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"errors": errs,
-		})
+	if ok := requests.Validate(c, &request, requests.ValidateSignupEmailExist); !ok {
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"exist": user.IsEmailExist(request.Email),
 	})
