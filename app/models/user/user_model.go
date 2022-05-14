@@ -4,6 +4,7 @@ import (
 	"GDColumn/app/models"
 	"GDColumn/pkg/database"
 	"GDColumn/pkg/hash"
+	"github.com/spf13/cast"
 )
 
 type User struct {
@@ -24,4 +25,9 @@ func (userModel *User) Create() {
 
 func (userModel *User) ComparePassword(_password string) bool {
 	return hash.BcryptCheck(_password, userModel.Password)
+}
+
+// GetStringID 获取 ID 的字符串格式
+func (userModel *User) GetStringID() string {
+	return cast.ToString(userModel.UserID)
 }
