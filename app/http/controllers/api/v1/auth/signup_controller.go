@@ -45,6 +45,8 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 	userID, err := snowflake.GetID()
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
+		response.Abort500(c, "创建用户失败，请稍后尝试~")
+		return
 	}
 	_user := user.User{
 		NickName:     request.NickName,
@@ -74,6 +76,7 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
+		return
 	}
 	// 2. 验证成功，创建数据
 	userModel := user.User{
