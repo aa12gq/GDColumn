@@ -31,6 +31,8 @@ func main() {
 
 	bootstrap.SetupDB()
 
+	bootstrap.SetupSnowflake()
+
 	bootstrap.SetupRoute(router)
 
 	err := router.Run(":" + config.Get("app.port"))

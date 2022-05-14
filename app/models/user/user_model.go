@@ -8,6 +8,7 @@ import (
 type User struct {
 	models.BaseModel
 
+	UserID 		 uint64 `json:"user_id"`
 	NickName     string `json:"name,omitempty"`
 	Email    	 string `json:"-"`
 	Phone 		 string `json:"-"`
