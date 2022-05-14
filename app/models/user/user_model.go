@@ -3,6 +3,7 @@ package user
 import (
 	"GDColumn/app/models"
 	"GDColumn/pkg/database"
+	"GDColumn/pkg/hash"
 )
 
 type User struct {
@@ -19,4 +20,8 @@ type User struct {
 
 func (userModel *User) Create() {
 	database.DB.Create(&userModel)
+}
+
+func (userModel *User) ComparePassword(_password string) bool {
+	return hash.BcryptCheck(_password, userModel.Password)
 }
