@@ -32,3 +32,8 @@ func Get(idstr string) (userModel User) {
 	database.DB.Where("user_id", idstr).First(&userModel)
 	return
 }
+
+func GetByEmail(email string) (userModel User) {
+	database.DB.Where("email = ?", email).First(&userModel)
+	return
+}

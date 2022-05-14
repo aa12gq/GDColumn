@@ -31,3 +31,8 @@ func (userModel *User) ComparePassword(_password string) bool {
 func (userModel *User) GetStringID() string {
 	return cast.ToString(userModel.UserID)
 }
+
+func (userModel *User) Save() (rowsAffected int64) {
+	result := database.DB.Save(&userModel)
+	return result.RowsAffected
+}
