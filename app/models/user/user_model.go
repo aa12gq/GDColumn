@@ -1,6 +1,9 @@
 package user
 
-import "GDColumn/app/models"
+import (
+	"GDColumn/app/models"
+	"GDColumn/pkg/database"
+)
 
 type User struct {
 	models.BaseModel
@@ -11,4 +14,8 @@ type User struct {
 	Password	 string `json:"-"`
 
 	models.CommonTimestampsField
+}
+
+func (userModel *User) Create() {
+	database.DB.Create(&userModel)
 }
