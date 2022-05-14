@@ -30,6 +30,8 @@ func main() {
 
 	bootstrap.SetupDB()
 
+	bootstrap.SetupRedis()
+
 	bootstrap.SetupSnowflake()
 
 	bootstrap.SetupRoute(router)
