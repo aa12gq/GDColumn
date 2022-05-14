@@ -4,6 +4,7 @@ import (
 	v1 "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/models/user"
 	"GDColumn/app/requests"
+	"GDColumn/pkg/jwt"
 	"GDColumn/pkg/logger"
 	"GDColumn/pkg/response"
 	"GDColumn/pkg/snowflake"
@@ -48,17 +49,19 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 		return
 	}
-	_user := user.User{
+	userModel := user.User{
 		NickName:     request.NickName,
 		Phone:    	  request.Phone,
 		Password: 	  request.Password,
 		UserID:		  userID,
 	}
-	_user.Create()
+	userModel.Create()
 
-	if _user.ID > 0 {
+	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
 		response.CreatedJSON(c, gin.H{
-			"data": _user,
+			"token": token,
+			"data":  userModel,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
@@ -88,8 +91,10 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	userModel.Create()
 
 	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
 		response.CreatedJSON(c, gin.H{
-			"data": userModel,
+			"token": token,
+			"data":  userModel,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
