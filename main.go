@@ -1,15 +1,11 @@
 package main
 
 import (
-	"GDColumn/app/http/middlewares"
-	"GDColumn/pkg/auth"
-	"GDColumn/pkg/response"
-	"flag"
-	"fmt"
 	"GDColumn/bootstrap"
 	btsConfig "GDColumn/config"
 	"GDColumn/pkg/config"
-
+	"flag"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,10 +34,6 @@ func main() {
 
 	bootstrap.SetupRoute(router)
 
-	router.GET("/test_auth", middlewares.AuthJWT(), func(c *gin.Context) {
-		userModel := auth.CurrentUser(c)
-		response.Data(c, userModel)
-	})
 
 	err := router.Run(":" + config.Get("app.port"))
 	if err != nil {
