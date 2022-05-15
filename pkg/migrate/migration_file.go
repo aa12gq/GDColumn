@@ -6,14 +6,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type migrationFunc func(gorm.Migrator, *sql.DB)
+type migrationFunc  func(gorm.Migrator, *sql.DB)
 
 var migrationFiles []MigrationFile
 
 type MigrationFile struct {
-	Up       migrationFunc
-	Down     migrationFunc
-	FileName string
+	Up			migrationFunc
+	Down 		migrationFunc
+	FileName	string
 }
 
 func Add(name string, up migrationFunc, down migrationFunc) {
