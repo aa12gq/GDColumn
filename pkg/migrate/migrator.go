@@ -79,7 +79,6 @@ func (migrator *Migrator) Rollback() {
 	}
 }
 
-
 func (migrator *Migrator) rollbackMigrations(migrations []Migration) bool {
 
 	// 标记是否真的有执行了迁移回退的操作
