@@ -1,12 +1,14 @@
 package main
 
 import (
+	"GDColumn/app/cmd"
 	"GDColumn/bootstrap"
 	btsConfig "GDColumn/config"
 	"GDColumn/pkg/config"
-	"flag"
+	"GDColumn/pkg/console"
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
+	"os"
 )
 
 func init() {
@@ -15,30 +17,29 @@ func init() {
 
 func main() {
 
-	// 配置初始化，依赖命令行 --env 参数
-	var env string
-	flag.StringVar(&env, "env", "", "加载 .env 文件，如 --env=testing 加载的是 .env.testing 文件")
-	flag.Parse()
-	config.InitConfig(env)
+	var rootCmd = &cobra.Command{
+		Use:   config.Get("app.name"),
+		Short: "A simple forum project",
+		Long:  `Default will run "serve" command, you can use "-h" flag to see all subcommands`,
 
-	bootstrap.SetupLogger()
+		PersistentPreRun: func(command *cobra.Command, args []string) {
 
-	gin.SetMode(gin.ReleaseMode)
+			config.InitConfig(cmd.Env)
 
+			bootstrap.SetupLogger()
+			bootstrap.SetupDB()
+			bootstrap.SetupRedis()
+		},
+	}
 
-	router := gin.New()
+	rootCmd.AddCommand(
+		cmd.CmdServe,
+	)
 
-	bootstrap.SetupDB()
+	cmd.RegisterDefaultCmd(rootCmd, cmd.CmdServe)
+	cmd.RegisterGlobalFlags(rootCmd)
 
-	bootstrap.SetupRedis()
-
-	bootstrap.SetupSnowflake()
-
-	bootstrap.SetupRoute(router)
-
-
-	err := router.Run(":" + config.Get("app.port"))
-	if err != nil {
-		fmt.Println(err.Error())
+	if err := rootCmd.Execute(); err != nil {
+		console.Exit(fmt.Sprintf("Failed to run app with %v: %s", os.Args, err.Error()))
 	}
 }
