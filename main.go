@@ -2,6 +2,7 @@ package main
 
 import (
 	"GDColumn/app/cmd"
+	"GDColumn/app/cmd/make"
 	"GDColumn/bootstrap"
 	btsConfig "GDColumn/config"
 	"GDColumn/pkg/config"
@@ -36,6 +37,7 @@ func main() {
 		cmd.CmdServe,
 		cmd.CmdKey,
 		cmd.CmdPlay,
+		make.CmdMake,
 	)
 
 	cmd.RegisterDefaultCmd(rootCmd, cmd.CmdServe)
