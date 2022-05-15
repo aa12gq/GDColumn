@@ -1,8 +1,10 @@
 package migrate
 
 import (
+	"GDColumn/pkg/console"
 	"GDColumn/pkg/database"
 	"gorm.io/gorm"
+	"io/ioutil"
 )
 
 type Migrator struct {
@@ -36,4 +38,75 @@ func (migrator *Migrator) createMigrationsTable() {
 	if !migrator.Migrator.HasTable(&migration) {
 		migrator.Migrator.CreateTable(&migration)
 	}
+}
+
+func (migrator *Migrator) Up() {
+
+	migrateFiles := migrator.readAllMigrationFiles()
+
+	batch := migrator.getBatch()
+
+	migrations := []Migration{}
+	migrator.DB.Find(&migrations)
+
+	// 可以通过此值来判断数据库是否已是最新
+	runed := false
+
+	for _, mfile := range migrateFiles {
+
+		if mfile.isNotMigrated(migrations) {
+			migrator.runUpMigration(mfile, batch)
+			runed = true
+		}
+	}
+
+	if !runed {
+		console.Success("database is up to date.")
+	}
+}
+
+func (migrator *Migrator) getBatch() int {
+
+	batch := 1
+
+	lastMigration := Migration{}
+	migrator.DB.Order("id DESC").First(&lastMigration)
+
+	if lastMigration.ID > 0 {
+		batch = lastMigration.Batch + 1
+	}
+	return batch
+}
+
+func (migrator *Migrator) readAllMigrationFiles() []MigrationFile {
+
+	files, err := ioutil.ReadDir(migrator.Folder)
+	console.ExitIf(err)
+
+	var migrateFiles []MigrationFile
+	for _, f := range files {
+
+		fileName := file.FileNameWithoutExtension(f.Name())
+
+		mfile := getMigrationFile(fileName)
+
+		if len(mfile.FileName) > 0 {
+			migrateFiles = append(migrateFiles, mfile)
+		}
+	}
+
+	return migrateFiles
+}
+
+func (migrator *Migrator) runUpMigration(mfile MigrationFile, batch int) {
+
+	if mfile.Up != nil {
+		console.Warning("migrating " + mfile.FileName)
+		mfile.Up(database.DB.Migrator(), database.SQLDB)
+		console.Success("migrated " + mfile.FileName)
+	}
+
+	// 入库
+	err := migrator.DB.Create(&Migration{Migration: mfile.FileName, Batch: batch}).Error
+	console.ExitIf(err)
 }
