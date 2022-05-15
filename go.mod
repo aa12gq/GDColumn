@@ -3,9 +3,11 @@ module GDColumn
 go 1.16
 
 require (
+	github.com/gertd/go-pluralize v0.2.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/iancoleman/strcase v0.2.0
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/sony/sonyflake v1.0.0
 	github.com/spf13/cast v1.5.0
