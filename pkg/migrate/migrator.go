@@ -150,3 +150,21 @@ func (migrator *Migrator) runUpMigration(mfile MigrationFile, batch int) {
 	err := migrator.DB.Create(&Migration{Migration: mfile.FileName, Batch: batch}).Error
 	console.ExitIf(err)
 }
+
+func (migrator *Migrator) Reset() {
+
+	migrations := []Migration{}
+
+	migrator.DB.Order("id DESC").Find(&migrations)
+
+	if !migrator.rollbackMigrations(migrations) {
+		console.Success("[migrations] table is empty, nothing to reset.")
+	}
+}
+
+func (migrator *Migrator) Refresh() {
+
+	migrator.Reset()
+
+	migrator.Up()
+}
