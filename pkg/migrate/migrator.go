@@ -168,3 +168,17 @@ func (migrator *Migrator) Refresh() {
 
 	migrator.Up()
 }
+
+func (migrator *Migrator) Fresh() {
+
+	dbname := database.CurrentDatabase()
+
+	err := database.DeleteAllTables()
+	console.ExitIf(err)
+	console.Success("clearup database " + dbname)
+
+	migrator.createMigrationsTable()
+	console.Success("[migrations] table created.")
+
+	migrator.Up()
+}
