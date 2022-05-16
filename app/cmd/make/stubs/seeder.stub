@@ -1,0 +1,28 @@
+package seeders
+
+import (
+    "fmt"
+    "GDColumn/database/factories"
+    "GDColumn/pkg/console"
+    "GDColumn/pkg/logger"
+    "GDColumn/pkg/seed"
+
+    "gorm.io/gorm"
+)
+
+func init() {
+
+    seed.Add("Seed{{StructNamePlural}}Table", func(db *gorm.DB) {
+
+        {{VariableNamePlural}}  := factories.Make{{StructNamePlural}}(10)
+
+        result := db.Table("{{TableName}}").Create(&{{VariableNamePlural}})
+
+        if err := result.Error; err != nil {
+            logger.LogIf(err)
+            return
+        }
+
+        console.Success(fmt.Sprintf("Table [%v] %v rows seeded", result.Statement.Table, result.RowsAffected))
+    })
+}
