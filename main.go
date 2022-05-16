@@ -40,6 +40,7 @@ func main() {
 		cmd.CmdPlay,
 		make.CmdMake,
 		cmd.CmdMigrate,
+		cmd.CmdDBSeed,
 	)
 
 	cmd.RegisterDefaultCmd(rootCmd, cmd.CmdServe)

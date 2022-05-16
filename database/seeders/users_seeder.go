@@ -2,7 +2,6 @@ package seeders
 
 import (
 	"fmt"
-	"GDColumn/app/models/user"
 	"GDColumn/database/factories"
 	"GDColumn/pkg/console"
 	"GDColumn/pkg/logger"
