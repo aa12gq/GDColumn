@@ -12,6 +12,9 @@ type User struct {
 
 	UserID 		 uint64 `json:"user_id"`
 	NickName     string `json:"name,omitempty"`
+	Description  string `json:"description,omitempty"`
+	Avatar  	 string `json:"avatar,omitempty"`
+	Column  	 string `json:"column,omitempty"`
 	Email    	 string `json:"-"`
 	Phone 		 string `json:"-"`
 	Password	 string `json:"-"`
