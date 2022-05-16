@@ -1,6 +1,7 @@
 package routes
 
 import (
+	controllers "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/http/controllers/api/v1/auth"
 	"GDColumn/app/http/middlewares"
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,9 @@ func RegisterAPIRoutes(r *gin.Engine) {
 
 			pwc := new(auth.PasswordController)
 			authGroup.POST("/password-reset/using-email", middlewares.GuestJWT(), pwc.ResetByEmail)
+
+			uc := new(controllers.UsersController)
+			v1.GET("/user", middlewares.AuthJWT(), uc.CurrentUser)
 		}
 	}
 }

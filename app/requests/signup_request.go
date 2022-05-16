@@ -94,7 +94,7 @@ func SignupUsingPhone(data interface{}, c *gin.Context) map[string][]string {
 
 type SignupUsingEmailRequest struct {
 	Email           string `json:"email,omitempty" valid:"email"`
-	NickName            string `valid:"nick_name" json:"nick_name"`
+	NickName        string `valid:"nick_name" json:"nick_name"`
 	Password        string `valid:"password" json:"password,omitempty"`
 	PasswordConfirm string `valid:"password_confirm" json:"password_confirm,omitempty"`
 }

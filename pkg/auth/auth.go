@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"GDColumn/app/models/user"
 	"GDColumn/pkg/logger"
 	"errors"
-	"GDColumn/app/models/user"
 	"github.com/gin-gonic/gin"
 )
 

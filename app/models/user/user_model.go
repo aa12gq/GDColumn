@@ -11,11 +11,11 @@ type User struct {
 	models.BaseModel
 
 	UserID 		 uint64 `json:"user_id"`
-	NickName     string `json:"name,omitempty"`
-	Description  string `json:"description,omitempty"`
-	Avatar  	 string `json:"avatar,omitempty"`
-	Column  	 string `json:"column,omitempty"`
-	Email    	 string `json:"-"`
+	NickName     string `json:"nick_name,omitempty"`
+	Description  string `json:"-"`
+	Avatar  	 string `json:"-"`
+	Column  	 string `json:"-"`
+	Email    	 string `json:"email,omitempty"`
 	Phone 		 string `json:"-"`
 	Password	 string `json:"-"`
 
