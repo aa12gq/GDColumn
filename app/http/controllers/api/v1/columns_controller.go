@@ -79,3 +79,23 @@ func (ctrl *ColumnsController) Index(c *gin.Context) {
         "pager": pager,
     })
 }
+
+func (ctrl *ColumnsController) Delete(c *gin.Context) {
+
+    columnModel := column.Get(c.Param("id"))
+    if columnModel.CID == 0 {
+        response.Abort404(c)
+        return
+    }
+    author := auth.CurrentUID(c)
+    Aid,_ := strconv.ParseUint(author, 10, 64)
+    if Aid == columnModel.Author {
+        rowsAffected := columnModel.Delete()
+        if rowsAffected > 0 {
+            response.Success(c)
+            return
+        }
+    }else {
+        response.Abort500(c, "删除失败，请稍后尝试~")
+    }
+}
