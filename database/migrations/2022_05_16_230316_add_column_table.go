@@ -12,7 +12,7 @@ func init() {
 
     type Column struct {
 
-        CID          uint64 `gorm:"type:bigint;`
+        CID          uint64 `gorm:"type:bigint;primaryKey"`
         Author       uint64 `gorm:"type:bigint;`
         Title        string `gorm:"type:varchar(255);not null;index"`
         Description  string `gorm:"type:varchar(255);not null;index"`

@@ -9,7 +9,7 @@ import (
 )
 
 func Get(idstr string) (column Column) {
-    database.DB.Where("id", idstr).First(&column)
+    database.DB.Where("c_id", idstr).First(&column)
     return
 }
 

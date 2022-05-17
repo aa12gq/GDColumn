@@ -7,7 +7,7 @@ import (
 
 type Column struct {
 
-    CID             uint64 `json:"Cid"`
+    CID             uint64 `gorm:"column:c_id;primaryKey;autoIncrement;" json:"c_id"`
     Author          uint64 `json:"author"`
     Title           string `json:"title"`
     Description     string `json:"description"`
