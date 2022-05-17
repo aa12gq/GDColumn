@@ -11,8 +11,9 @@ import (
 func init() {
 
     type Column struct {
+        models.BaseModel
 
-        CID          uint64 `gorm:"type:bigint;primaryKey"`
+        CID          uint64 `gorm:"type:bigint;"`
         Author       uint64 `gorm:"type:bigint;`
         Title        string `gorm:"type:varchar(255);not null;index"`
         Description  string `gorm:"type:varchar(255);not null;index"`

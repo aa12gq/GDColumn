@@ -40,10 +40,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			usersGroup.GET("", uc.Index)
 		}
 		clc := new(controllers.ColumnsController)
-		clsGroup := v1.Group("/column")
+		clcGroup := v1.Group("/columns")
 		{
-			clsGroup.POST("", middlewares.AuthJWT(), clc.Store)
-			clsGroup.PUT("/:id", middlewares.AuthJWT(), clc.Update)
+			clcGroup.GET("", clc.Index)
+			clcGroup.POST("", middlewares.AuthJWT(), clc.Store)
+			clcGroup.PUT("/:id", middlewares.AuthJWT(), clc.Update)
 		}
 	}
 }

@@ -14,13 +14,13 @@ type PaginationRequest struct {
 func Pagination(data interface{}, c *gin.Context) map[string][]string {
 
 	rules := govalidator.MapData{
-		"sort":     []string{"in:id,created_at,updated_at"},
+		"sort":     []string{"in:cid,created_at,updated_at"},
 		"order":    []string{"in:asc,desc"},
 		"per_page": []string{"numeric_between:2,100"},
 	}
 	messages := govalidator.MapData{
 		"sort": []string{
-			"in:排序字段仅支持 id,created_at,updated_at",
+			"in:排序字段仅支持 cid,created_at,updated_at",
 		},
 		"order": []string{
 			"in:排序规则仅支持 asc（正序）,desc（倒序）",

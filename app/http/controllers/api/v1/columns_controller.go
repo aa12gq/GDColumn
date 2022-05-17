@@ -65,3 +65,17 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
         response.Abort500(c)
     }
 }
+
+func (ctrl *ColumnsController) Index(c *gin.Context) {
+
+    //request := requests.PaginationRequest{}
+    //if ok := requests.Validate(c, &request, requests.Pagination); !ok {
+    //    return
+    //}
+
+    data, pager := column.Paginate(c, 5)
+    response.JSON(c, gin.H{
+        "data":  data,
+        "pager": pager,
+    })
+}
