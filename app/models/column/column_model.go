@@ -12,6 +12,7 @@ type Column struct {
     Author          uint64 `json:"author"`
     Title           string `json:"title"`
     Description     string `json:"description"`
+    Avatar        string `json:"avatar,omitempty"`
 
     models.CommonTimestampsField
 }
