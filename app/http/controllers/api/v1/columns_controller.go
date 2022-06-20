@@ -41,24 +41,20 @@ func (ctrl *ColumnsController) Store(c *gin.Context) {
 
 func (ctrl *ColumnsController) Update(c *gin.Context) {
 
-    // 验证 url 参数 id 是否正确
-    columnModel := column.Get(c.Param("id"))
+    request := requests.ColumnRequest{}
+    if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
+        return
+    }
+    currentUser := auth.CurrentUser(c)
+    columnModel := column.Get(strconv.FormatUint(currentUser.Column,10))
     if columnModel.CID == 0 {
         response.Abort404(c)
         return
     }
 
-
-    request := requests.ColumnRequest{}
-    if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
-        return
-    }
-
-    // 保存数据
     columnModel.Title = request.Title
     columnModel.Description = request.Description
     rowsAffected := columnModel.Save()
-
     if rowsAffected > 0 {
         response.Data(c, columnModel)
     } else {

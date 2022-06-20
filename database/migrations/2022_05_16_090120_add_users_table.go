@@ -16,7 +16,7 @@ func init() {
         UserID       uint64 `gorm:"type:bigint;`
         NickName     string `gorm:"type:varchar(255);not null;index"`
         Description  string `gorm:"type:varchar(255);not null;index"`
-        Avatar       string `gorm:"type:varchar(255);not null;index"`
+        AvatarID     string `gorm:"type:varchar(255);not null;index"`
         Column       string `gorm:"type:varchar(255);not null;index"`
 
         Email        string `gorm:"type:varchar(255);index;default:null"`
@@ -26,12 +26,17 @@ func init() {
         models.CommonTimestampsField
     }
 
+    type Avatar struct {
+        ID  uint64 `gorm:"type:bigint;"`
+        URL string `gorm:"type:varchar(255);not null;index"`
+    }
+
     up := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.AutoMigrate(&User{})
+        migrator.AutoMigrate(&User{},&Avatar{})
     }
 
     down := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.DropTable(&User{})
+        migrator.DropTable(&User{},&Avatar{})
     }
 
     migrate.Add("2022_05_16_090120_add_users_table", up, down)

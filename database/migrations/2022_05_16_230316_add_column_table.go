@@ -28,11 +28,11 @@ func init() {
     }
 
     up := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.AutoMigrate(&Column{},&Avatar{})
+        migrator.AutoMigrate(&Column{})
     }
 
     down := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.DropTable(&Column{},&Avatar{})
+        migrator.DropTable(&Column{})
     }
 
     migrate.Add("2022_05_16_230316_add_column_table", up, down)

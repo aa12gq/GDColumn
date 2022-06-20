@@ -6,18 +6,18 @@ import (
 )
 
 type Column struct {
-    CID uint64 `json:"cid"`
-    Title string `json:"title"`
+    models.BaseModel
+    CID         uint64 `json:"cid"`
+    Title       string `json:"title"`
     Description string `json:"description"`
-    AvatarID     uint64 `json:"avatar_id"`
-    Avatar Avatar
-    Author uint64 `json:"author"`
+    AvatarID    uint64 `json:"avatar_id"`
+    Avatar      Avatar
+    Author      uint64 `json:"author"`
     models.CommonTimestampsField
 }
 
 type Avatar struct {
     ID  uint64 `json:"_id"`
-    MainID uint64 `json:"main_id"`
     URL string `json:"url"`
 }
 

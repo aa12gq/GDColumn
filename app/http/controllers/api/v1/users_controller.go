@@ -1,11 +1,10 @@
 package v1
 
 import (
+    "GDColumn/app/models/user"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
-    "GDColumn/app/models/user"
-
     "github.com/gin-gonic/gin"
 )
 
@@ -30,4 +29,22 @@ func (ctrl *UsersController) Index(c *gin.Context) {
         "data":  data,
         "pager": pager,
     })
+}
+
+func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
+
+    request := requests.UserUpdateProfileRequest{}
+    if ok := requests.Validate(c, &request, requests.UserUpdateProfile); !ok {
+        return
+    }
+
+    currentUser := auth.CurrentUser(c)
+    currentUser.NickName = request.NickName
+    currentUser.Description = request.Description
+    rowsAffected := currentUser.Save()
+    if rowsAffected > 0 {
+        response.Data(c, currentUser)
+    } else {
+        response.Abort500(c, "更新失败，请稍后尝试~")
+    }
 }

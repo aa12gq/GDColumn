@@ -38,6 +38,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		usersGroup := v1.Group("/users")
 		{
 			usersGroup.GET("", uc.Index)
+			usersGroup.PUT("", middlewares.AuthJWT(), uc.UpdateProfile)
 		}
 		clc := new(controllers.ColumnsController)
 		clcGroup := v1.Group("/columns")
@@ -45,7 +46,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			clcGroup.GET("", clc.Index)
 			clcGroup.GET("/:id", middlewares.AuthJWT(), clc.CurrentColumn)
 			clcGroup.POST("", middlewares.AuthJWT(), clc.Store)
-			clcGroup.PUT("/:id", middlewares.AuthJWT(), clc.Update)
+			clcGroup.PUT("", middlewares.AuthJWT(), clc.Update)
 			clcGroup.DELETE("/:id", middlewares.AuthJWT(), clc.Delete)
 		}
 		tpc := new(controllers.PostsController)
@@ -53,5 +54,6 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		{
 			tpcGroup.POST("", middlewares.AuthJWT(), tpc.Store)
 		}
+
 	}
 }

@@ -12,7 +12,8 @@ type User struct {
 
 	UserID 		 uint64 `json:"user_id"`
 	Column  	 uint64 `json:"column"`
-	Avatar       uint64 `json:"avatar,omitempty"`
+	AvatarID     uint64 `json:"avatar_id"`
+	Avatar       Avatar
 	NickName     string `json:"nick_name,omitempty"`
 	Description  string `json:"-"`
 	Email    	 string `json:"email,omitempty"`
