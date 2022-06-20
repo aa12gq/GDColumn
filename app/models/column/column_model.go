@@ -6,15 +6,19 @@ import (
 )
 
 type Column struct {
-    models.BaseModel
-
-    CID             uint64 `json:"c_id"`
-    Author          uint64 `json:"author"`
-    Title           string `json:"title"`
-    Description     string `json:"description"`
-    Avatar        string `json:"avatar,omitempty"`
-
+    CID uint64 `json:"cid"`
+    Title string `json:"title"`
+    Description string `json:"description"`
+    AvatarID     uint64 `json:"avatar_id"`
+    Avatar Avatar
+    Author uint64 `json:"author"`
     models.CommonTimestampsField
+}
+
+type Avatar struct {
+    ID  uint64 `json:"_id"`
+    MainID uint64 `json:"main_id"`
+    URL string `json:"url"`
 }
 
 func (column *Column) Create() {

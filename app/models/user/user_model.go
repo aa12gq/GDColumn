@@ -11,15 +11,20 @@ type User struct {
 	models.BaseModel
 
 	UserID 		 uint64 `json:"user_id"`
+	Column  	 uint64 `json:"column"`
+	Avatar       uint64 `json:"avatar,omitempty"`
 	NickName     string `json:"nick_name,omitempty"`
 	Description  string `json:"-"`
-	Avatar  	 string `json:"-"`
-	Column  	 string `json:"-"`
 	Email    	 string `json:"email,omitempty"`
 	Phone 		 string `json:"-"`
 	Password	 string `json:"-"`
 
 	models.CommonTimestampsField
+}
+
+type Avatar struct {
+	ID  uint64 `json:"id"`
+	URL string `json:"url"`
 }
 
 func (userModel *User) Create() {

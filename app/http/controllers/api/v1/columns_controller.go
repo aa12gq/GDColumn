@@ -22,11 +22,11 @@ func (ctrl *ColumnsController) Store(c *gin.Context) {
     if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
         return
     }
-    Cid,_ := snowflake.GetID()
+    _id,_ := snowflake.GetID()
     author := auth.CurrentUID(c)
     Aid,_ := strconv.ParseUint(author, 10, 64)
     columnModel := column.Column{
-       CID:         Cid,
+       CID:         _id,
        Author:      Aid,
        Title:       request.Title,
        Description: request.Description,
@@ -60,6 +60,22 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
     rowsAffected := columnModel.Save()
 
     if rowsAffected > 0 {
+        response.Data(c, columnModel)
+    } else {
+        response.Abort500(c)
+    }
+}
+
+func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
+
+    // 验证 url 参数 id 是否正确
+    columnModel := column.Get(c.Param("id"))
+    if columnModel.CID == 0 {
+        response.Abort404(c)
+        return
+    }
+
+    if columnModel.CID > 0 {
         response.Data(c, columnModel)
     } else {
         response.Abort500(c)

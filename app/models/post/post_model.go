@@ -13,8 +13,9 @@ type Post struct {
     Title         string  `json:"title,omitempty" `
     Content       string  `json:"content,omitempty" `
     Excerpt       string  `json:"excerpt,omitempty" `
-    UserID        string    `json:"user_id,omitempty"`
-    ColumnID      string    `json:"column_id,omitempty"`
+    Image         string  `json:"image"`
+    UserID        string  `json:"user_id,omitempty"`
+    ColumnID      string  `json:"column_id,omitempty"`
 
     User          user.User `json:"user"`
     Column        column.Column  `json:"column"`

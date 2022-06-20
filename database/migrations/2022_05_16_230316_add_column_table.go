@@ -14,6 +14,7 @@ func init() {
         models.BaseModel
 
         CID          uint64 `gorm:"type:bigint;"`
+        AvatarID     uint64 `gorm:"type:bigint"`
         Author       uint64 `gorm:"type:bigint;`
         Title        string `gorm:"type:varchar(255);not null;index"`
         Description  string `gorm:"type:varchar(255);not null;index"`
@@ -21,12 +22,17 @@ func init() {
         models.CommonTimestampsField
     }
 
+    type Avatar struct {
+        ID  uint64 `gorm:"type:bigint;"`
+        URL string `gorm:"type:varchar(255);not null;index"`
+    }
+
     up := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.AutoMigrate(&Column{})
+        migrator.AutoMigrate(&Column{},&Avatar{})
     }
 
     down := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.DropTable(&Column{})
+        migrator.DropTable(&Column{},&Avatar{})
     }
 
     migrate.Add("2022_05_16_230316_add_column_table", up, down)

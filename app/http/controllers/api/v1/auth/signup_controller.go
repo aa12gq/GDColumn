@@ -3,11 +3,13 @@ package auth
 import (
 	v1 "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/models/user"
+	"GDColumn/app/models/column"
 	"GDColumn/app/requests"
 	"GDColumn/pkg/jwt"
 	"GDColumn/pkg/logger"
 	"GDColumn/pkg/response"
 	"GDColumn/pkg/snowflake"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -81,19 +83,32 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 		return
 	}
+	columnID, err := snowflake.GetID()
+	if err != nil {
+		logger.ErrorString("Auth","GetID",err.Error())
+		response.Abort500(c, "创建用户失败，请稍后尝试~")
+		return
+	}
+	columnModel := column.Column{
+		CID:                   columnID,
+		Title:                 fmt.Sprintf("这是的%v专栏，有一段非常有意思的简介，可以更新一下欧",request.NickName),
+		Description:           fmt.Sprintf("%v的专栏",request.NickName),
+		Author:                userID,
+	}
+	columnModel.Create()
 	// 2. 验证成功，创建数据
 	userModel := user.User{
 		NickName:     request.NickName,
 		Email:    	  request.Email,
 		Password:     request.Password,
 		UserID:       userID,
+		Column:		  columnID,
 	}
 	userModel.Create()
 
 	if userModel.ID > 0 {
-		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
+		//token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
 		response.CreatedJSON(c, gin.H{
-			"token": token,
 			"data":  userModel,
 		})
 	} else {
