@@ -4,7 +4,10 @@ import (
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
+    "GDColumn/pkg/config"
+    "GDColumn/pkg/file"
     "GDColumn/pkg/response"
+    "GDColumn/pkg/snowflake"
     "github.com/gin-gonic/gin"
 )
 
@@ -105,5 +108,42 @@ func (ctrl *UsersController) UpdatePassword(c *gin.Context) {
         currentUser.Save()
 
         response.Success(c)
+    }
+}
+
+func (ctrl *UsersController) UpdateAvatar(c *gin.Context) {
+
+    request := requests.UserUpdateAvatarRequest{}
+    if ok := requests.Validate(c, &request, requests.UserUpdateAvatar); !ok {
+        return
+    }
+    avatarId,_ := snowflake.GetID()
+    currentUser := auth.CurrentUser(c)
+    if currentUser.AvatarID != 0 {
+        avatar, err := file.SaveUploadAvatar(currentUser.AvatarID,c, request.Avatar)
+        if err != nil {
+            response.Abort500(c, "上传头像失败，请稍后尝试~")
+            return
+        }
+        currentUser.Avatar.ID = currentUser.AvatarID
+        currentUser.Avatar.URL = config.GetString("app.url") + avatar
+        currentUser.Save()
+        response.Data(c, currentUser)
+    }else {
+        avatar, err := file.SaveUploadAvatar(avatarId,c, request.Avatar)
+        //var oss oss.OssStruct
+        //oss.LocalUrl(request.Avatar)
+        //oss.Bucket.PutObject("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir")
+        if err != nil {
+            response.Abort500(c, "上传头像失败，请稍后尝试~")
+            return
+        }
+
+        currentUser.AvatarID =  avatarId
+        currentUser.Avatar.ID = currentUser.AvatarID
+        currentUser.Avatar.URL = config.GetString("app.url") + avatar
+        currentUser.Save()
+
+        response.Data(c, currentUser)
     }
 }

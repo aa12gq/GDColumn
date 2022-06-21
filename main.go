@@ -31,6 +31,7 @@ func main() {
 			bootstrap.SetupDB()
 			bootstrap.SetupRedis()
 			bootstrap.SetupSnowflake()
+			bootstrap.SetupOss()
 		},
 	}
 

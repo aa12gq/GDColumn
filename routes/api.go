@@ -34,14 +34,15 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		}
 
 		uc := new(controllers.UsersController)
-		v1.GET("/user", middlewares.AuthJWT(),middlewares.Cors, uc.CurrentUser)
 		usersGroup := v1.Group("/users")
 		{
 			usersGroup.GET("", uc.Index)
+			usersGroup.GET("/user", middlewares.AuthJWT(),middlewares.Cors, uc.CurrentUser)
 			usersGroup.PUT("", middlewares.AuthJWT(), uc.UpdateProfile)
 			usersGroup.PUT("/email", middlewares.AuthJWT(), uc.UpdateEmail)
 			usersGroup.PUT("/phone", middlewares.AuthJWT(), uc.UpdatePhone)
 			usersGroup.PUT("/password", middlewares.AuthJWT(), uc.UpdatePassword)
+			usersGroup.PUT("/avatar", middlewares.AuthJWT(), uc.UpdateAvatar)
 		}
 		clc := new(controllers.ColumnsController)
 		clcGroup := v1.Group("/columns")
