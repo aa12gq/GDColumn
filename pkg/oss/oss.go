@@ -17,38 +17,14 @@ type OssStruct struct {
 	Cname 		    bool
 }
 
-func (this *OssStruct) OssCennect(o OssStruct) (err error) {
-	//此处需要进入阿里云oss控制台配置域名
-	this.Endpoint = o.Endpoint
-	this.AccessKeyId = o.AccessKeyId
-	this.AccessKeySecret = o.AccessKeySecret
-	this.Region = o.Region
-	this.Bucket = o.Bucket
-	this.Secure = true
-	this.Cname = true
-	client, err := oss.New(this.Endpoint, this.AccessKeyId, this.AccessKeySecret, oss.UseCname(true))
+func (this *OssStruct) OssCennect(o *OssStruct) (err error) {
+	client, err := oss.New(o.Endpoint, o.AccessKeyId, o.AccessKeySecret)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error:", err)
 	}
-	Bucket, err = client.Bucket("bitpig-column")
-
+	Bucket, err = client.Bucket(o.Bucket)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
 	return
 }
-
-//func (this *OssStruct) LocalUrl(c *gin.Context, file *multipart.FileHeader) (url string, err error) {
-//
-//	userModel := auth.CurrentUser(c)
-//	//拼接文件名称
-//	AvatarID := fmt.Sprintf("%s",userModel.AvatarID)
-//	str := "https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir" + AvatarID + ".jpg"
-//	fmt.Println("拼接好的",str)
-//
-//	err = Bucket.UploadFile(file)
-//	if err != nil {
-//		url = "上传错误"
-//	} else {
-//		url = fmt.Sprintf("%s%s", "https://static.xxxxxxxi.cn/", str)
-//	}
-//	return url, err
-//
-//}

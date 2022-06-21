@@ -4,7 +4,6 @@ import (
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
-    "GDColumn/pkg/config"
     "GDColumn/pkg/file"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
@@ -129,15 +128,14 @@ func (ctrl *UsersController) UpdateAvatar(c *gin.Context) {
             response.Abort500(c, "上传头像失败，请稍后尝试~")
             return
         }
+
         currentUser.Avatar.ID = currentUser.AvatarID
-        currentUser.Avatar.URL = config.GetString("app.url") + avatar
+        currentUser.Avatar.URL = avatar
         currentUser.Save()
+
         response.Data(c, currentUser)
     }else {
         avatar, err := file.SaveUploadAvatar(avatarId,c, request.Avatar)
-        //var oss oss.OssStruct
-        //oss.LocalUrl(request.Avatar)
-        //oss.Bucket.PutObject("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir")
         if err != nil {
             response.Abort500(c, "上传头像失败，请稍后尝试~")
             return
@@ -145,7 +143,7 @@ func (ctrl *UsersController) UpdateAvatar(c *gin.Context) {
 
         currentUser.AvatarID =  avatarId
         currentUser.Avatar.ID = currentUser.AvatarID
-        currentUser.Avatar.URL = config.GetString("app.url") + avatar
+        currentUser.Avatar.URL = avatar
         currentUser.Save()
 
         response.Data(c, currentUser)

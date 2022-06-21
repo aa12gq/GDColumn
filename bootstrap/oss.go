@@ -14,7 +14,7 @@ func SetupOss() {
 	oss.Bucket = "bitpig-column"
 	oss.Region = "华东1(杭州)"
 
-	if err := oss.OssCennect(oss); err != nil {
+	if err := oss.OssCennect(&oss); err != nil {
 		logger.LogIf(err)
 	}
 }

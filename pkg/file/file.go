@@ -2,15 +2,16 @@ package file
 
 import (
 	"GDColumn/pkg/helpers"
+	aliyun "GDColumn/pkg/oss"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"mime/multipart"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"fmt"
-	"time"
 )
 
 // Put 将数据存入文件
@@ -34,23 +35,25 @@ func FileNameWithoutExtension(fileName string) string {
 	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
 
-func SaveUploadAvatar(id uint64, c *gin.Context, file *multipart.FileHeader) (string, error) {
+func SaveUploadAvatar(id uint64, c *gin.Context, file *multipart.FileHeader) (avatarPath string, err error) {
 
 	var avatar string
-	// 确保目录存在，不存在创建
 	publicPath := "public"
 	dirName := fmt.Sprintf("/uploads/avatars/")
 	os.MkdirAll(publicPath+dirName, 0755)
 
 	num := strconv.FormatUint(id,10)
-	// 保存文件
 	fileName := randomNameFromUploadFile2(num,file)
-	// public/uploads/avatars/2021/12/22/1/nFDacgaWKpWWOmOt.png
-	avatarPath := publicPath + dirName + fileName
+	avatarPath = publicPath + dirName + fileName
 	if err := c.SaveUploadedFile(file, avatarPath); err != nil {
 		return avatar, err
 	}
 
+	suffix := path.Ext(file.Filename)
+	pwd,_ := os.Getwd()
+	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,suffix),fmt.Sprintf("%v/public/uploads/avatars/%v.jpg",pwd,num))
+	os.RemoveAll(publicPath+dirName)
+	avatarPath = fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",num,suffix)
 	return avatarPath, nil
 }
 
