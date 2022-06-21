@@ -41,9 +41,8 @@ func SaveUploadAvatar(id uint64, c *gin.Context, file *multipart.FileHeader) (st
 	publicPath := "public"
 	dirName := fmt.Sprintf("/uploads/avatars/")
 	os.MkdirAll(publicPath+dirName, 0755)
-	//userModel := auth.CurrentUser(c)
+
 	num := strconv.FormatUint(id,10)
-	//num := strconv.FormatUint(userModel.AvatarID,10)
 	// 保存文件
 	fileName := randomNameFromUploadFile2(num,file)
 	// public/uploads/avatars/2021/12/22/1/nFDacgaWKpWWOmOt.png
@@ -60,27 +59,5 @@ func randomNameFromUploadFile(file *multipart.FileHeader) string {
 }
 
 func randomNameFromUploadFile2(random string, file *multipart.FileHeader) string {
-
 	return random + filepath.Ext(file.Filename)
-}
-
-
-func SaveUPTest(c *gin.Context, file *multipart.FileHeader) (string, error) {
-
-	var avatar string
-	// 确保目录存在，不存在创建
-	publicPath := "https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir"
-	t := time.Now()
-	dirName := fmt.Sprintf("%s%s%s%s%s%s%s", strconv.Itoa(t.Year()), strconv.Itoa(int(t.Month())), strconv.Itoa(t.Day()), strconv.Itoa(t.Hour()), strconv.Itoa(t.Minute()), strconv.Itoa(t.Second()), strconv.Itoa(int(t.Unix())))
-	//os.MkdirAll(publicPath+dirName, 0755)
-
-	// 保存文件
-	fileName := randomNameFromUploadFile(file)
-	// public/uploads/avatars/2021/12/22/1/nFDacgaWKpWWOmOt.png
-	avatarPath := publicPath + dirName + fileName
-	if err := c.SaveUploadedFile(file, avatarPath); err != nil {
-		return avatar, err
-	}
-
-	return avatarPath, nil
 }

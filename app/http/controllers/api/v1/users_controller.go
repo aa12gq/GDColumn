@@ -18,6 +18,10 @@ type UsersController struct {
 
 func (ctrl *UsersController) CurrentUser(c *gin.Context) {
     userModel := auth.CurrentUser(c)
+    avatarModel := auth.CurrentUserAvatar(c)
+
+    userModel.Avatar.ID = avatarModel.ID
+    userModel.Avatar.URL = avatarModel.URL
     response.Data(c, userModel)
 }
 

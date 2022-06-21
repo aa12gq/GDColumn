@@ -24,7 +24,7 @@ type User struct {
 }
 
 type Avatar struct {
-	ID  uint64 `json:"id"`
+	ID  uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
 	URL string `json:"url"`
 }
 

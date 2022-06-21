@@ -38,6 +38,11 @@ func Get(idstr string) (userModel User) {
 	return
 }
 
+func GetAvatar(idstr string) (avatarModel Avatar) {
+	database.DB.Where("id", idstr).First(&avatarModel)
+	return
+}
+
 func GetByEmail(email string) (userModel User) {
 	database.DB.Where("email = ?", email).First(&userModel)
 	return
