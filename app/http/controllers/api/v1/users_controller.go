@@ -1,12 +1,11 @@
 package v1
 
 import (
+    "GDColumn/app/models/image"
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
-    "GDColumn/pkg/file"
     "GDColumn/pkg/response"
-    "GDColumn/pkg/snowflake"
     "github.com/gin-gonic/gin"
 )
 
@@ -47,6 +46,11 @@ func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
     currentUser := auth.CurrentUser(c)
     currentUser.NickName = request.NickName
     currentUser.Description = request.Description
+
+    imgModel := image.Get(request.AvatarID)
+    currentUser.Avatar.ID = imgModel.ID
+    currentUser.Avatar.URL = imgModel.URL
+
     rowsAffected := currentUser.Save()
     if rowsAffected > 0 {
         response.Data(c, currentUser)
@@ -111,41 +115,5 @@ func (ctrl *UsersController) UpdatePassword(c *gin.Context) {
         currentUser.Save()
 
         response.Success(c)
-    }
-}
-
-func (ctrl *UsersController) UpdateAvatar(c *gin.Context) {
-
-    request := requests.UserUpdateAvatarRequest{}
-    if ok := requests.Validate(c, &request, requests.UserUpdateAvatar); !ok {
-        return
-    }
-    avatarId,_ := snowflake.GetID()
-    currentUser := auth.CurrentUser(c)
-    if currentUser.AvatarID != 0 {
-        avatar, err := file.SaveUploadAvatar(currentUser.AvatarID,c, request.Avatar)
-        if err != nil {
-            response.Abort500(c, "上传头像失败，请稍后尝试~")
-            return
-        }
-
-        currentUser.Avatar.ID = currentUser.AvatarID
-        currentUser.Avatar.URL = avatar
-        currentUser.Save()
-
-        response.Data(c, currentUser)
-    }else {
-        avatar, err := file.SaveUploadAvatar(avatarId,c, request.Avatar)
-        if err != nil {
-            response.Abort500(c, "上传头像失败，请稍后尝试~")
-            return
-        }
-
-        currentUser.AvatarID =  avatarId
-        currentUser.Avatar.ID = currentUser.AvatarID
-        currentUser.Avatar.URL = avatar
-        currentUser.Save()
-
-        response.Data(c, currentUser)
     }
 }

@@ -42,6 +42,11 @@ func (userModel *User) GetStringID() string {
 }
 
 func (userModel *User) Save() (rowsAffected int64) {
-	result := database.DB.Save(&userModel)
+	result := database.DB.Save(&userModel,)
+	return result.RowsAffected
+}
+
+func (avatarModel *Avatar) Save() (rowsAffected int64) {
+	result := database.DB.Save(&avatarModel)
 	return result.RowsAffected
 }

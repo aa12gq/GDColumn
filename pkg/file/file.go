@@ -35,32 +35,38 @@ func FileNameWithoutExtension(fileName string) string {
 	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
 
-func SaveUploadAvatar(id uint64, c *gin.Context, file *multipart.FileHeader) (avatarPath string, err error) {
+func SaveUploadImage(id uint64, c *gin.Context, file *multipart.FileHeader) (avatarPath,imageName,extName string, err error) {
 
 	var avatar string
 	publicPath := "public"
-	dirName := fmt.Sprintf("/uploads/avatars/")
+	dirName := fmt.Sprintf("/uploads/images/")
 	os.MkdirAll(publicPath+dirName, 0755)
 
 	num := strconv.FormatUint(id,10)
-	fileName := randomNameFromUploadFile2(num,file)
+	suffix := path.Ext(file.Filename)
+	newSuffix := path.Ext(file.Filename)
+	if newSuffix != ".jpg"{
+		newSuffix = ".jpg"
+	}
+	fileName := fileNameFromUploadFile(num,file)
 	avatarPath = publicPath + dirName + fileName
 	if err := c.SaveUploadedFile(file, avatarPath); err != nil {
-		return avatar, err
+		return avatar,file.Filename,newSuffix, err
 	}
 
-	suffix := path.Ext(file.Filename)
 	pwd,_ := os.Getwd()
-	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,suffix),fmt.Sprintf("%v/public/uploads/avatars/%v.jpg",pwd,num))
-	os.RemoveAll(publicPath+dirName)
-	avatarPath = fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",num,suffix)
-	return avatarPath, nil
+	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,num,suffix)
+
+	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,newSuffix),imgPwd);
+	os.Remove(imgPwd)
+	avatarPath = fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",num,newSuffix)
+	return avatarPath,file.Filename,newSuffix, err
 }
 
 func randomNameFromUploadFile(file *multipart.FileHeader) string {
 	return helpers.RandomString(16) + filepath.Ext(file.Filename)
 }
 
-func randomNameFromUploadFile2(random string, file *multipart.FileHeader) string {
-	return random + filepath.Ext(file.Filename)
+func fileNameFromUploadFile(name string, file *multipart.FileHeader) string {
+	return name + filepath.Ext(file.Filename)
 }

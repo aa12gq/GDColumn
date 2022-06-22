@@ -35,14 +35,18 @@ func RegisterAPIRoutes(r *gin.Engine) {
 
 		uc := new(controllers.UsersController)
 		usersGroup := v1.Group("/users")
+		v1.GET("/current", middlewares.AuthJWT(),middlewares.Cors, uc.CurrentUser)
 		{
 			usersGroup.GET("", uc.Index)
-			usersGroup.GET("/user", middlewares.AuthJWT(),middlewares.Cors, uc.CurrentUser)
 			usersGroup.PUT("", middlewares.AuthJWT(), uc.UpdateProfile)
 			usersGroup.PUT("/email", middlewares.AuthJWT(), uc.UpdateEmail)
 			usersGroup.PUT("/phone", middlewares.AuthJWT(), uc.UpdatePhone)
 			usersGroup.PUT("/password", middlewares.AuthJWT(), uc.UpdatePassword)
-			usersGroup.PUT("/avatar", middlewares.AuthJWT(), uc.UpdateAvatar)
+		}
+		imc := new(controllers.ImagesController)
+		imcGroup := v1.Group("/upload")
+		{
+			imcGroup.POST("",middlewares.LimitPerRoute("20-H"),imc.Upload)
 		}
 		clc := new(controllers.ColumnsController)
 		clcGroup := v1.Group("/columns")
