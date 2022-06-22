@@ -17,7 +17,7 @@ type Column struct {
 }
 
 type Avatar struct {
-    ID  uint64 `json:"_id"`
+    ID  uint64 `json:"id"`
     URL string `json:"url"`
 }
 

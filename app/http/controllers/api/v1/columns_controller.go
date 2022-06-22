@@ -64,10 +64,14 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
 
 func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
 
+    userModel := auth.CurrentUser(c)
     // 验证 url 参数 id 是否正确
     columnModel := column.Get(c.Param("id"))
     if columnModel.CID == 0 {
         response.Abort404(c)
+        return
+    }else if columnModel.Author != userModel.UserID{
+        response.Abort403(c)
         return
     }
 
