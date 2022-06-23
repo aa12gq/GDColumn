@@ -5,6 +5,7 @@ import (
     "GDColumn/app/models/image"
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
+    "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
     "strconv"
@@ -65,5 +66,52 @@ func (ctrl *PostsController) Store(c *gin.Context) {
     } else {
         fmt.Println("error")
         response.Abort500(c, "创建失败，请稍后尝试~")
+    }
+}
+
+func (ctrl *PostsController) Update(c *gin.Context) {
+
+    postModel := post.Get(c.Param("id"))
+    if postModel.ID == 0 {
+        response.Abort404(c)
+        return
+    }
+
+    request := requests.PostRequest{}
+    if ok := requests.Validate(c, &request, requests.PostSave); !ok {
+        return
+    }
+
+    postModel.Title = request.Title
+    postModel.Content = request.Content
+    postModel.ImageID = request.ImageID
+
+    uid := auth.CurrentUID(c)
+    userModel := user.Get(uid)
+    avatarModel := image.Get(strconv.FormatUint(userModel.AvatarID,10))
+    userModel.Avatar.ID = avatarModel.ID
+    userModel.Avatar.URL = avatarModel.URL
+    imgModel := image.Get(request.ImageID)
+    img := &post.Image{
+        ID:imgModel.ID,
+        URL:imgModel.URL,
+    }
+    post2Model := &post.Post2{
+        ID:                    postModel.ID,
+        Title:                 request.Title,
+        Content:               request.Content,
+        Excerpt:               request.Content,
+        ImageID:               request.ImageID,
+        UserID:                request.UserID,
+        ColumnID:              request.ColumnID,
+        User:                  userModel,
+        Image:                 *img,
+    }
+
+    rowsAffected := postModel.Save()
+    if rowsAffected > 0 {
+        response.Data(c, post2Model)
+    } else {
+        response.Abort500(c, "更新失败，请稍后尝试~")
     }
 }

@@ -18,9 +18,9 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
     rules := govalidator.MapData{
         "title":       []string{"required", "min_cn:3", "max_cn:40"},
         "content":     []string{"required", "min_cn:5", "max_cn:50000"},
-        "image_id":       []string{"required", "min_cn:10", "max_cn:50000"},
-        "column_id":   []string{"required", "exists:columns,c_id"},
-        "user_id" : []string{"required", "exists:users,user_id"},
+        "image_id":       []string{ "min_cn:10", "max_cn:50000"},
+        "column_id":   []string{"exists:columns,c_id"},
+        "user_id" : []string{"exists:users,user_id"},
 }
     messages := govalidator.MapData{
         "title": []string{
@@ -29,7 +29,6 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
             "max_cn:标题长度需小于 40",
         },
         "image_id": []string{
-            "required:图片id为必填项",
             "exists:图片未找到",
         },
         "content": []string{
@@ -37,11 +36,9 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
             "min_cn:长度需大于 5",
         },
         "column_id": []string{
-            "required:文章的专栏为必填项",
             "exists:文章的专栏未找到",
         },
         "user_id": []string{
-            "required:作者id为必填项",
             "exists:作者未找到",
         },
     }
