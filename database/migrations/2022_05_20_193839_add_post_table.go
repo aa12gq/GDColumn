@@ -1,11 +1,9 @@
 package migrations
 
 import (
-    "GDColumn/app/models/column"
-    "GDColumn/app/models/user"
-    "database/sql"
     "GDColumn/app/models"
     "GDColumn/pkg/migrate"
+    "database/sql"
 
     "gorm.io/gorm"
 )
@@ -19,11 +17,8 @@ func init() {
         Content      string `gorm:"type:varchar(255);not null;index"`
         Excerpt      string `gorm:"type:varchar(255);not null;index"`
         UserID       string `gorm:"type:bigint(20);not null;index"`
-        Image        string `gorm:"type:varchar(255);not null;index"`
+        ImageID      string `gorm:"type:bigint(20);not null;index"`
         ColumnID     string `gorm:"type:bigint(255);not null;index"`
-
-        User         user.User
-        Column       column.Column
 
         models.CommonTimestampsField
     }

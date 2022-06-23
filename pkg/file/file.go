@@ -3,6 +3,7 @@ package file
 import (
 	"GDColumn/pkg/helpers"
 	aliyun "GDColumn/pkg/oss"
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"mime/multipart"
@@ -56,8 +57,8 @@ func SaveUploadImage(id uint64, c *gin.Context, file *multipart.FileHeader) (ava
 
 	pwd,_ := os.Getwd()
 	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,num,suffix)
-
-	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,newSuffix),imgPwd);
+	option :=oss.ContentType("image/jpg")
+	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,newSuffix),imgPwd,option);
 	os.Remove(imgPwd)
 	avatarPath = fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",num,newSuffix)
 	return avatarPath,file.Filename,newSuffix, err

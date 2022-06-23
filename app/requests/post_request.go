@@ -8,10 +8,9 @@ import (
 type PostRequest struct {
     Title      string `json:"title,omitempty" valid:"title"`
     Content    string `json:"content,omitempty" valid:"content"`
-    Excerpt    string `json:"excerpt,omitempty" valid:"excerpt"`
-    Image      string `json:"image,omitempty" valid:"body"`
+    ImageID    string `json:"image_id,omitempty" valid:"image_id"`
     ColumnID   string `json:"column_id,omitempty" valid:"column_id"`
-    Author     string `json:"author,omitempty" valid:"author"`
+    UserID     string `json:"user_id,omitempty" valid:"user_id"`
 }
 
 func PostSave(data interface{}, c *gin.Context) map[string][]string {
@@ -19,10 +18,9 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
     rules := govalidator.MapData{
         "title":       []string{"required", "min_cn:3", "max_cn:40"},
         "content":     []string{"required", "min_cn:5", "max_cn:50000"},
-        "excerpt":     []string{"required", "min_cn:5", "max_cn:50000"},
-        "Image":       []string{"required", "min_cn:10", "max_cn:50000"},
-        "column_id":   []string{"required", "exists:column,id"},
-        "author" : []string{"required", "exists:author,id"},
+        "image_id":       []string{"required", "min_cn:10", "max_cn:50000"},
+        "column_id":   []string{"required", "exists:columns,c_id"},
+        "user_id" : []string{"required", "exists:users,user_id"},
 }
     messages := govalidator.MapData{
         "title": []string{
@@ -30,15 +28,11 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
             "min_cn:标题长度需大于 3",
             "max_cn:标题长度需小于 40",
         },
-        "image": []string{
-            "required:图片内容为必填项",
-            "min_cn:长度需大于 10",
+        "image_id": []string{
+            "required:图片id为必填项",
+            "exists:图片未找到",
         },
         "content": []string{
-            "required:文章内容为必填项",
-            "min_cn:长度需大于 5",
-        },
-        "excerpt": []string{
             "required:文章内容为必填项",
             "min_cn:长度需大于 5",
         },
@@ -46,7 +40,7 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
             "required:文章的专栏为必填项",
             "exists:文章的专栏未找到",
         },
-        "author": []string{
+        "user_id": []string{
             "required:作者id为必填项",
             "exists:作者未找到",
         },
