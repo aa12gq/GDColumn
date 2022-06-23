@@ -5,6 +5,7 @@ import (
 	"GDColumn/pkg/database"
 	"GDColumn/pkg/paginator"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 )
 
 func IsEmailExist(email string) bool {
@@ -34,11 +35,11 @@ func GetByMulti(loginID string) (userModel User) {
 }
 
 func Get(idstr string) (userModel User) {
-	database.DB.Where("user_id", idstr).First(&userModel)
+	database.DB.Preload(clause.Associations).Where("id", idstr).First(&userModel)
 	return
 }
 
-func GetAvatar(idstr string) (avatarModel Avatar) {
+func GetAvatar(idstr string) (avatarModel Image) {
 	database.DB.Where("id", idstr).First(&avatarModel)
 	return
 }

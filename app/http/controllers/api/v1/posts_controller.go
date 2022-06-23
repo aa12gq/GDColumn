@@ -1,18 +1,15 @@
 package v1
 
 import (
-    "GDColumn/app/models/post"
-    "GDColumn/app/policies"
     "GDColumn/app/models/image"
+    "GDColumn/app/models/post"
     "GDColumn/app/models/user"
+    "GDColumn/app/policies"
     "GDColumn/app/requests"
-    "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
-    "strconv"
-
-    "fmt"
     "github.com/gin-gonic/gin"
+    "github.com/spf13/cast"
 )
 
 type PostsController struct {
@@ -25,47 +22,33 @@ func (ctrl *PostsController) Store(c *gin.Context) {
     if ok := requests.Validate(c, &request, requests.PostSave); !ok {
         return
     }
-    fmt.Println("通过")
 
-
-    userModel := user.Get(request.UserID)
-    avatarModel := image.Get(strconv.FormatUint(userModel.AvatarID,10))
-    userModel.Avatar.ID = avatarModel.ID
-    userModel.Avatar.URL = avatarModel.URL
-
+    userModel := user.Get(request.AuthorID)
     imgModel := image.Get(request.ImageID)
     img := &post.Image{
-        ID:imgModel.ID,
-        URL:imgModel.URL,
+       ID:imgModel.ID,
+       URL:imgModel.URL,
     }
-
     id,_:=snowflake.GetID()
     postModel := &post.Post{
-     ID:         id,
-     Title:      request.Title,
-     Content:     request.Content,
-     Excerpt:    request.Content,
-     ColumnID:    request.ColumnID,
-     UserID:     request.UserID,
-     ImageID:    request.ImageID,
+        ID:         id,
+        Title:      request.Title,
+        Content:    request.Content,
+        Excerpt:    request.Content,
+        ImageID:    cast.ToUint64(request.ColumnID),
+        AuthorID:   cast.ToUint64(request.AuthorID),
+        ColumnID:   cast.ToUint64(request.ColumnID),
+        Author:     &userModel,
+        Image:      img,
     }
-
-    post2Model := &post.Post2{
-        ID:                    id,
-        Title:                 request.Title,
-        Content:               request.Content,
-        Excerpt:               request.Content,
-        ImageID:               request.ImageID,
-        UserID:                request.UserID,
-        ColumnID:              request.ColumnID,
-        User:                  userModel,
-        Image:                 *img,
+    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
+        response.Abort403(c)
+        return
     }
     postModel.Create()
     if postModel.ID > 0 {
-        response.Data(c, post2Model)
+        response.Data(c, postModel)
     } else {
-        fmt.Println("error")
         response.Abort500(c, "创建失败，请稍后尝试~")
     }
 }
@@ -78,7 +61,7 @@ func (ctrl *PostsController) Update(c *gin.Context) {
         return
     }
 
-    if ok := policies.CanModifyPost(c, postModel); !ok {
+    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
         response.Abort403(c)
         return
     }
@@ -88,35 +71,20 @@ func (ctrl *PostsController) Update(c *gin.Context) {
         return
     }
 
-    postModel.Title = request.Title
-    postModel.Content = request.Content
-    postModel.ImageID = request.ImageID
-
-    uid := auth.CurrentUID(c)
-    userModel := user.Get(uid)
-    avatarModel := image.Get(strconv.FormatUint(userModel.AvatarID,10))
-    userModel.Avatar.ID = avatarModel.ID
-    userModel.Avatar.URL = avatarModel.URL
     imgModel := image.Get(request.ImageID)
-    img := &post.Image{
-        ID:imgModel.ID,
+    image := &post.Image{
+        ID:  imgModel.ID,
         URL:imgModel.URL,
     }
-    post2Model := &post.Post2{
-        ID:                    postModel.ID,
-        Title:                 request.Title,
-        Content:               request.Content,
-        Excerpt:               request.Content,
-        ImageID:               request.ImageID,
-        UserID:                request.UserID,
-        ColumnID:              request.ColumnID,
-        User:                  userModel,
-        Image:                 *img,
-    }
+
+    postModel.Title = request.Title
+    postModel.Content = request.Content
+    postModel.ImageID = cast.ToUint64(request.ImageID)
+    postModel.Image = image
 
     rowsAffected := postModel.Save()
     if rowsAffected > 0 {
-        response.Data(c, post2Model)
+        response.Data(c, postModel)
     } else {
         response.Abort500(c, "更新失败，请稍后尝试~")
     }
@@ -129,17 +97,24 @@ func (ctrl *PostsController) Delete(c *gin.Context) {
         response.Abort404(c)
         return
     }
-
-    if ok := policies.CanModifyPost(c, postModel); !ok {
+    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
         response.Abort403(c)
         return
     }
-
     rowsAffected := postModel.Delete()
     if rowsAffected > 0 {
         response.Success(c)
         return
     }
-
     response.Abort500(c, "删除失败，请稍后尝试~")
+}
+
+func (ctrl *PostsController) Show(c *gin.Context) {
+
+    postModel := post.Get(c.Param("id"))
+    if postModel.ID == 0 {
+        response.Abort404(c)
+        return
+    }
+    response.Data(c, postModel)
 }

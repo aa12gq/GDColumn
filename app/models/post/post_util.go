@@ -4,12 +4,13 @@ import (
      "GDColumn/pkg/app"
      "GDColumn/pkg/database"
      "GDColumn/pkg/paginator"
+     "gorm.io/gorm/clause"
 
-     "github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 )
 
 func Get(idstr string) (post Post) {
-    database.DB.Where("id", idstr).First(&post)
+    database.DB.Preload(clause.Associations).Where("id", idstr).First(&post)
     return
 }
 

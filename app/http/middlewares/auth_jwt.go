@@ -20,14 +20,12 @@ func AuthJWT() gin.HandlerFunc {
 			return
 		}
 		userModel := user.Get(claims.UserID)
-		if userModel.UserID == 0 {
+		if userModel.ID == 0 {
 			response.Unauthorized(c,"找不到对应用户，用户可能已删除")
 			return
 		}
 		id := strconv.FormatUint(userModel.AvatarID,10)
 		avatarModel := user.GetAvatar(id)
-		fmt.Println("id",avatarModel.ID)
-		fmt.Println("头像",avatarModel.URL)
 
 		c.Set("current_user_id", userModel.GetStringID())
 		c.Set("current_user_name", userModel.NickName)

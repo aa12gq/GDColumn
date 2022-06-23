@@ -20,7 +20,7 @@ func (pc *PasswordController) ResetByEmail(c *gin.Context) {
 
 	// 2. 更新密码
 	userModel := user.GetByEmail(request.Email)
-	if userModel.UserID == 0 {
+	if userModel.ID == 0 {
 		response.Abort404(c)
 	} else {
 		userModel.Password = request.Password

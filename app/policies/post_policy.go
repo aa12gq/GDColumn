@@ -1,11 +1,11 @@
 package policies
 
 import (
-	"GDColumn/app/models/post"
 	"GDColumn/pkg/auth"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 )
 
-func CanModifyPost(c *gin.Context, _post post.Post) bool {
-	return auth.CurrentUID(c) == _post.UserID
+func CanModifyPost(c *gin.Context, author uint64) bool {
+	return auth.CurrentUID(c) == cast.ToString(author)
 }

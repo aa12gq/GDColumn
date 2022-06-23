@@ -9,8 +9,8 @@ type PostRequest struct {
     Title      string `json:"title,omitempty" valid:"title"`
     Content    string `json:"content,omitempty" valid:"content"`
     ImageID    string `json:"image_id,omitempty" valid:"image_id"`
-    ColumnID   string `json:"column_id,omitempty" valid:"column_id"`
-    UserID     string `json:"user_id,omitempty" valid:"user_id"`
+    ColumnID     string `json:"column_id,omitempty" valid:"column_id"`
+    AuthorID     string `json:"author_id,omitempty" valid:"author_id"`
 }
 
 func PostSave(data interface{}, c *gin.Context) map[string][]string {
@@ -19,8 +19,8 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
         "title":       []string{"required", "min_cn:3", "max_cn:40"},
         "content":     []string{"required", "min_cn:5", "max_cn:50000"},
         "image_id":       []string{ "min_cn:10", "max_cn:50000"},
-        "column_id":   []string{"exists:columns,c_id"},
-        "user_id" : []string{"exists:users,user_id"},
+        "column_id":   []string{"exists:columns,id"},
+        "author_id" : []string{"exists:users,id"},
 }
     messages := govalidator.MapData{
         "title": []string{
@@ -38,7 +38,7 @@ func PostSave(data interface{}, c *gin.Context) map[string][]string {
         "column_id": []string{
             "exists:文章的专栏未找到",
         },
-        "user_id": []string{
+        "author_id": []string{
             "exists:作者未找到",
         },
     }

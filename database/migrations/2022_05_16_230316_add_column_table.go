@@ -13,7 +13,6 @@ func init() {
     type Column struct {
         models.BaseModel
 
-        CID          uint64 `gorm:"type:bigint;"`
         AvatarID     uint64 `gorm:"type:bigint"`
         Author       uint64 `gorm:"type:bigint;`
         Title        string `gorm:"type:varchar(255);not null;index"`

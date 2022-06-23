@@ -16,9 +16,9 @@ func init() {
         Title        string `gorm:"type:varchar(255);`
         Content      string `gorm:"type:varchar(255);not null;index"`
         Excerpt      string `gorm:"type:varchar(255);not null;index"`
-        UserID       string `gorm:"type:bigint(20);not null;index"`
-        ImageID      string `gorm:"type:bigint(20);not null;index"`
-        ColumnID     string `gorm:"type:bigint(255);not null;index"`
+        AuthorID     uint64 `gorm:"type:bigint(20);not null;index"`
+        ImageID      uint64 `gorm:"type:bigint(20);not null;index"`
+        ColumnID     uint64 `gorm:"type:bigint(20);not null;index"`
 
         models.CommonTimestampsField
     }

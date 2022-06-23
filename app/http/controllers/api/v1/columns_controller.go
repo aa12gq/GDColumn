@@ -27,13 +27,13 @@ func (ctrl *ColumnsController) Store(c *gin.Context) {
     author := auth.CurrentUID(c)
     Aid,_ := strconv.ParseUint(author, 10, 64)
     columnModel := column.Column{
-       CID:         _id,
+       ID:          _id,
        Author:      Aid,
        Title:       request.Title,
        Description: request.Description,
     }
     columnModel.Create()
-    if columnModel.CID > 0 {
+    if columnModel.ID > 0 {
         response.Created(c, columnModel)
     } else {
         response.Abort500(c, "创建失败，请稍后尝试~")
@@ -46,17 +46,23 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
     if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
         return
     }
+
+    imgModel := image.Get(request.AvatarID)
+    avatar := &column.Image{
+        ID:  imgModel.ID,
+        URL:imgModel.URL,
+    }
+
     currentUser := auth.CurrentUser(c)
-    columnModel := column.Get(strconv.FormatUint(currentUser.Column,10))
-    if columnModel.CID == 0 {
+
+    columnModel := column.Get(strconv.FormatUint(currentUser.ColumnID,10))
+    if columnModel.ID == 0 {
         response.Abort404(c)
         return
     }
-    imgModel := image.Get(request.AvatarID)
-    columnModel.Avatar.ID = imgModel.ID
-    columnModel.Avatar.URL = imgModel.URL
     columnModel.Title = request.Title
     columnModel.Description = request.Description
+    columnModel.Avatar = avatar
 
     rowsAffected := columnModel.Save()
     if rowsAffected > 0 {
@@ -71,15 +77,15 @@ func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
     userModel := auth.CurrentUser(c)
     // 验证 url 参数 id 是否正确
     columnModel := column.Get(c.Param("id"))
-    if columnModel.CID == 0 {
+    if columnModel.ID == 0 {
         response.Abort404(c)
         return
-    }else if columnModel.Author != userModel.UserID{
+    }else if columnModel.Author != userModel.ID{
         response.Abort403(c)
         return
     }
 
-    if columnModel.CID > 0 {
+    if columnModel.ID > 0 {
         response.Data(c, columnModel)
     } else {
         response.Abort500(c)
@@ -103,7 +109,7 @@ func (ctrl *ColumnsController) Index(c *gin.Context) {
 func (ctrl *ColumnsController) Delete(c *gin.Context) {
 
     columnModel := column.Get(c.Param("id"))
-    if columnModel.CID == 0 {
+    if columnModel.ID == 0 {
         response.Abort404(c)
         return
     }

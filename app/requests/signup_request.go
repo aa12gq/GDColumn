@@ -103,7 +103,7 @@ func SignupUsingEmail(data interface{}, c *gin.Context) map[string][]string {
 
 	rules := govalidator.MapData{
 		"email":            []string{"required", "min:4", "max:30", "email", "not_exists:users,email"},
-		"nick_name":             []string{"required", "alpha_num", "between:3,20", "not_exists:users,name"},
+		"nick_name":        []string{"required", "alpha_num", "between:3,20", "not_exists:users,nick_name"},
 		"password":         []string{"required", "min:6"},
 		"password_confirm": []string{"required"},
 	}

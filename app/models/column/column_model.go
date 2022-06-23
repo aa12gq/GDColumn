@@ -6,19 +6,19 @@ import (
 )
 
 type Column struct {
-    models.BaseModel
-    CID         uint64 `json:"cid"`
-    Title       string `json:"title"`
-    Description string `json:"description"`
-    AvatarID    uint64 `json:"avatar_id"`
-    Avatar      Avatar
-    Author      uint64 `json:"author"`
+    ID          uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id,omitempty"`
+    Title       string `json:"title,omitempty"`
+    Description string `json:"description,omitempty"`
+    AvatarID    uint64 `json:"-"`
+
+    Avatar      *Image  `json:"avatar,omitempty"`
+    Author      uint64 `json:"author,omitempty"`
     models.CommonTimestampsField
 }
 
-type Avatar struct {
-    ID  uint64 `json:"id"`
-    URL string `json:"url"`
+type Image struct {
+    ID  uint64 `json:"id,omitempty"`
+    URL string `json:"url,omitempty"`
 }
 
 func (column *Column) Create() {

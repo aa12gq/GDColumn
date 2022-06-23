@@ -2,30 +2,35 @@ package user
 
 import (
 	"GDColumn/app/models"
+	"GDColumn/app/models/column"
 	"GDColumn/pkg/database"
 	"GDColumn/pkg/hash"
 	"github.com/spf13/cast"
 )
 
 type User struct {
-	models.BaseModel
-
-	UserID 		 uint64 `json:"user_id"`
-	Column  	 uint64 `json:"column"`
-	AvatarID     uint64 `json:"avatar_id"`
-	Avatar       Avatar
+	ID           uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+	ColumnID  	 uint64 `json:"-"`
+	AvatarID     uint64 `json:"-"`
 	NickName     string `json:"nick_name,omitempty"`
-	Description  string `json:"-"`
+	Description  string `json:"description,omitempty"`
 	Email    	 string `json:"email,omitempty"`
 	Phone 		 string `json:"-"`
 	Password	 string `json:"-"`
 
+	Avatar 	     *Image  `json:"avatar,omitempty"`
+	Column 		 *Column  `json:"-"`
+
 	models.CommonTimestampsField
 }
 
-type Avatar struct {
-	ID  uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
-	URL string `json:"url"`
+type Image struct {
+	ID  uint64 `json:"id,omitempty"`
+	URL string `json:"url,omitempty"`
+}
+
+type Column struct {
+	column.Column
 }
 
 func (userModel *User) Create() {
@@ -38,15 +43,20 @@ func (userModel *User) ComparePassword(_password string) bool {
 
 // GetStringID 获取 ID 的字符串格式
 func (userModel *User) GetStringID() string {
-	return cast.ToString(userModel.UserID)
+	return cast.ToString(userModel.ID)
 }
 
 func (userModel *User) Save() (rowsAffected int64) {
-	result := database.DB.Save(&userModel,)
+	result := database.DB.Save(&userModel)
 	return result.RowsAffected
 }
 
-func (avatarModel *Avatar) Save() (rowsAffected int64) {
-	result := database.DB.Save(&avatarModel)
+func (userModel *User) Update() (rowsAffected int64) {
+	result := database.DB.Save(&userModel)
 	return result.RowsAffected
 }
+
+//func (avatarModel *Avatar) Save() (rowsAffected int64) {
+//	result := database.DB.Save(&avatarModel)
+//	return result.RowsAffected
+//}

@@ -8,6 +8,7 @@ import (
     "GDColumn/pkg/snowflake"
     "github.com/gin-gonic/gin"
     "fmt"
+    "github.com/spf13/cast"
     "time"
 )
 
@@ -24,7 +25,7 @@ func (ctrl *ImagesController) Upload(c *gin.Context) {
     avatarId,_ := snowflake.GetID()
     var imageModel image.Image
     var err error
-    imageModel.URL,imageModel.FileName,imageModel.ExtName,err = file.SaveUploadImage(avatarId,c,request.Image)
+    imageModel.URL,err = file.SaveUploadImage(cast.ToString(avatarId),c,request.Image)
     if err != nil {
         fmt.Println("上传失败:", err)
         response.Abort500(c, "上传头像失败，请稍后尝试~")

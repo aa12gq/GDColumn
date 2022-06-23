@@ -14,8 +14,6 @@ func init() {
         models.BaseModel
 
         URL          string `gorm:"type:varchar(255);not null;index"`
-        FileName     string `gorm:"type:varchar(255);not null;index"`
-        ExtName      string `gorm:"type:varchar(255);not null;index"`
 
         models.CommonTimestampsField
     }

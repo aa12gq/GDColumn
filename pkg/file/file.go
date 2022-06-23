@@ -3,6 +3,7 @@ package file
 import (
 	"GDColumn/pkg/helpers"
 	aliyun "GDColumn/pkg/oss"
+	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -10,9 +11,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
-	"fmt"
 )
 
 // Put 将数据存入文件
@@ -36,32 +35,26 @@ func FileNameWithoutExtension(fileName string) string {
 	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
 
-func SaveUploadImage(id uint64, c *gin.Context, file *multipart.FileHeader) (avatarPath,imageName,extName string, err error) {
+func SaveUploadImage(id string, c *gin.Context, file *multipart.FileHeader) (avatarPath string, err error) {
 
 	var avatar string
 	publicPath := "public"
 	dirName := fmt.Sprintf("/uploads/images/")
 	os.MkdirAll(publicPath+dirName, 0755)
 
-	num := strconv.FormatUint(id,10)
 	suffix := path.Ext(file.Filename)
-	newSuffix := path.Ext(file.Filename)
-	if newSuffix != ".jpg"{
-		newSuffix = ".jpg"
-	}
-	fileName := fileNameFromUploadFile(num,file)
+	fileName := fileNameFromUploadFile(id,file)
 	avatarPath = publicPath + dirName + fileName
 	if err := c.SaveUploadedFile(file, avatarPath); err != nil {
-		return avatar,file.Filename,newSuffix, err
+		return avatar, err
 	}
 
 	pwd,_ := os.Getwd()
-	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,num,suffix)
-	option :=oss.ContentType("image/jpg")
-	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",num,newSuffix),imgPwd,option);
+	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,id,suffix)
+	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",id,".jpg"),
+		imgPwd,oss.ContentType("image/jpg"));
 	os.Remove(imgPwd)
-	avatarPath = fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",num,newSuffix)
-	return avatarPath,file.Filename,newSuffix, err
+	return fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",id,".jpg"), err
 }
 
 func randomNameFromUploadFile(file *multipart.FileHeader) string {

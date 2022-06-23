@@ -8,7 +8,7 @@ import (
      "github.com/gin-gonic/gin"
 )
 
-func Get(idstr string) (image Image) {
+func Get(idstr string) (image *Image) {
     database.DB.Where("id", idstr).First(&image)
     return
 }

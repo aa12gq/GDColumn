@@ -7,34 +7,23 @@ import (
 )
 
 type Post struct {
-    ID            uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+    ID            uint64  `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
     Title         string  `json:"title,omitempty" `
     Content       string  `json:"content,omitempty" `
     Excerpt       string  `json:"excerpt,omitempty" `
-    ImageID       string  `json:"image_id"`
-    UserID        string  `json:"user_id,omitempty"`
-    ColumnID      string  `json:"column_id,omitempty"`
+    ImageID       uint64  `json:"-"`
+    AuthorID      uint64  `json:"-"`
+    ColumnID      uint64  `json:"column_id,omitempty"`
 
-    models.CommonTimestampsField
-}
+    Author        *user.User `json:"author,omitempty"`
+    Image         *Image     `json:"image,omitempty"`
 
-type Post2 struct {
-    ID            uint64  `json:"id,omitempty"`
-    Title         string  `json:"title,omitempty" `
-    Content       string  `json:"content,omitempty" `
-    Excerpt       string  `json:"excerpt,omitempty" `
-    ImageID       string  `json:"image_id"`
-    UserID        string  `json:"user_id,omitempty"`
-    ColumnID      string  `json:"column_id,omitempty"`
-
-    User          user.User
-    Image         Image
     models.CommonTimestampsField
 }
 
 type Image struct {
-    ID  uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
-    URL string `json:"url"`
+    ID  uint64 `json:"id,omitempty"`
+    URL string `json:"url,omitempty"`
 }
 
 func (post *Post) Create() {

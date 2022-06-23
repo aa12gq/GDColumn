@@ -8,8 +8,6 @@ import (
 type Image struct {
     ID       uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
     URL      string `json:"url"`
-    FileName string `json:"filename"`
-    ExtName  string `json:"extname"`
 
     models.CommonTimestampsField
 }

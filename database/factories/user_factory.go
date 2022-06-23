@@ -18,11 +18,11 @@ func MakeUsers(times int) []user.User {
 	cid,_ := snowflake.GetID()
 	for i := 0; i < times; i++ {
 		model := user.User{
-			NickName:      faker.Username(),
-			UserID:			_id,
+			NickName:       faker.Username(),
+			ID:			    _id,
 			Email:    		faker.Email(),
 			Description: 	"this is description",
-			Column:     	cid,
+			ColumnID:     	cid,
 			Phone:    		helpers.RandomNumber(11),
 			Password: 		"$2a$14$oPzVkIdwJ8KqY0erYAYQxOuAAlbI/sFIsH0C0R4MPc.3JbWWSuaUe",
 		}

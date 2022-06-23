@@ -55,7 +55,7 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		NickName:     request.NickName,
 		Phone:    	  request.Phone,
 		Password: 	  request.Password,
-		UserID:		  userID,
+		ID:		      userID,
 	}
 	userModel.Create()
 
@@ -83,34 +83,34 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 		return
 	}
+
 	columnID, err := snowflake.GetID()
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
-		response.Abort500(c, "创建用户失败，请稍后尝试~")
+		response.Abort500(c, "创建专栏失败，请稍后尝试~")
 		return
 	}
 	columnModel := column.Column{
-		CID:                   columnID,
+		ID:                    columnID,
 		Title:                 fmt.Sprintf("这是的%v专栏，有一段非常有意思的简介，可以更新一下欧",request.NickName),
 		Description:           fmt.Sprintf("%v的专栏",request.NickName),
 		Author:                userID,
 	}
 	columnModel.Create()
+
 	// 2. 验证成功，创建数据
 	userModel := user.User{
 		NickName:     request.NickName,
 		Email:    	  request.Email,
 		Password:     request.Password,
-		UserID:       userID,
-		Column:		  columnID,
+		ID:           userID,
+		ColumnID:     columnID,
 	}
 	userModel.Create()
 
 	if userModel.ID > 0 {
 		//token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
-		response.CreatedJSON(c, gin.H{
-			"data":  userModel,
-		})
+		response.Created(c,userModel)
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 	}

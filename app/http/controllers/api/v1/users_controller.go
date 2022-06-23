@@ -16,11 +16,15 @@ type UsersController struct {
 
 func (ctrl *UsersController) CurrentUser(c *gin.Context) {
     userModel := auth.CurrentUser(c)
-    avatarModel := auth.CurrentUserAvatar(c)
 
-    userModel.Avatar.ID = avatarModel.ID
-    userModel.Avatar.URL = avatarModel.URL
-    response.Data(c, userModel)
+    currentUser := user.User{
+        ID : userModel.ID,
+        Email : userModel.Email,
+        NickName : userModel.NickName,
+        ColumnID : userModel.ColumnID,
+    }
+
+    response.Data(c, currentUser)
 }
 
 func (ctrl *UsersController) Index(c *gin.Context) {
@@ -43,15 +47,19 @@ func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
         return
     }
 
+    imgModel := image.Get(request.AvatarID)
+    avatar := &user.Image{
+      ID:  imgModel.ID,
+      URL:imgModel.URL,
+    }
+
     currentUser := auth.CurrentUser(c)
     currentUser.NickName = request.NickName
     currentUser.Description = request.Description
-
-    imgModel := image.Get(request.AvatarID)
-    currentUser.Avatar.ID = imgModel.ID
-    currentUser.Avatar.URL = imgModel.URL
+    currentUser.AvatarID = imgModel.ID
 
     rowsAffected := currentUser.Save()
+    currentUser.Avatar = avatar
     if rowsAffected > 0 {
         response.Data(c, currentUser)
     } else {

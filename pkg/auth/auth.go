@@ -40,11 +40,11 @@ func CurrentUser(c *gin.Context) user.User {
 }
 
 // CurrentUserAvatar 从 gin.context 中获取当前登录用户头像
-func CurrentUserAvatar(c *gin.Context) user.Avatar {
-	avatarModel, ok := c.MustGet("current_avatar").(user.Avatar)
+func CurrentUserAvatar(c *gin.Context) user.Image {
+	avatarModel, ok := c.MustGet("current_avatar").(user.Image)
 	if !ok {
 		logger.LogIf(errors.New("无法获取用户头像"))
-		return user.Avatar{}
+		return user.Image{}
 	}
 	// db is now a *DB value
 	return avatarModel
