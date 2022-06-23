@@ -121,3 +121,25 @@ func (ctrl *PostsController) Update(c *gin.Context) {
         response.Abort500(c, "更新失败，请稍后尝试~")
     }
 }
+
+func (ctrl *PostsController) Delete(c *gin.Context) {
+
+    postModel := post.Get(c.Param("id"))
+    if postModel.ID == 0 {
+        response.Abort404(c)
+        return
+    }
+
+    if ok := policies.CanModifyPost(c, postModel); !ok {
+        response.Abort403(c)
+        return
+    }
+
+    rowsAffected := postModel.Delete()
+    if rowsAffected > 0 {
+        response.Success(c)
+        return
+    }
+
+    response.Abort500(c, "删除失败，请稍后尝试~")
+}
