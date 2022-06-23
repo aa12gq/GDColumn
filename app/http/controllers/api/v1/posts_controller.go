@@ -2,6 +2,7 @@ package v1
 
 import (
     "GDColumn/app/models/post"
+    "GDColumn/app/policies"
     "GDColumn/app/models/image"
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
@@ -74,6 +75,11 @@ func (ctrl *PostsController) Update(c *gin.Context) {
     postModel := post.Get(c.Param("id"))
     if postModel.ID == 0 {
         response.Abort404(c)
+        return
+    }
+
+    if ok := policies.CanModifyPost(c, postModel); !ok {
+        response.Abort403(c)
         return
     }
 
