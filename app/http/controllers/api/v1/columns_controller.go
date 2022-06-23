@@ -2,6 +2,7 @@ package v1
 
 import (
     "GDColumn/app/models/column"
+    "GDColumn/app/models/image"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
@@ -51,9 +52,12 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
         response.Abort404(c)
         return
     }
-
+    imgModel := image.Get(request.AvatarID)
+    columnModel.Avatar.ID = imgModel.ID
+    columnModel.Avatar.URL = imgModel.URL
     columnModel.Title = request.Title
     columnModel.Description = request.Description
+
     rowsAffected := columnModel.Save()
     if rowsAffected > 0 {
         response.Data(c, columnModel)
