@@ -4,12 +4,18 @@ import (
 	controllers "GDColumn/app/http/controllers/api/v1"
 	"GDColumn/app/http/controllers/api/v1/auth"
 	"GDColumn/app/http/middlewares"
+	"GDColumn/pkg/config"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterAPIRoutes(r *gin.Engine) {
 
-	v1 := r.Group("/v1")
+	var v1 *gin.RouterGroup
+	if len(config.Get("app.api_domain")) == 0 {
+		v1 = r.Group("/api/v1")
+	} else {
+		v1 = r.Group("/v1")
+	}
 	v1.Use(middlewares.LimitIP("200-H"))
 	{
 		authGroup := v1.Group("/auth")
