@@ -2,10 +2,13 @@ package link
 
 import (
      "GDColumn/pkg/app"
-     "GDColumn/pkg/database"
-     "GDColumn/pkg/paginator"
+    "GDColumn/pkg/cache"
+    "GDColumn/pkg/database"
+    "GDColumn/pkg/helpers"
+    "GDColumn/pkg/paginator"
+    "time"
 
-     "github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 )
 
 func Get(idstr string) (link Link) {
@@ -37,5 +40,26 @@ func Paginate(c *gin.Context, perPage int) (links []Link, paging paginator.Pagin
         app.V1URL(database.TableName(&Link{})),
         perPage,
     )
+    return
+}
+
+func AllCached() (links []Link) {
+    // 设置缓存 key
+    cacheKey := "links:all"
+    // 设置过期时间
+    expireTime := 120 * time.Minute
+    // 取数据
+    cache.GetObject(cacheKey, &links)
+
+    // 如果数据为空
+    if helpers.Empty(links) {
+        // 查询数据库
+        links = All()
+        if helpers.Empty(links) {
+            return links
+        }
+        // 设置缓存
+        cache.Set(cacheKey, links, expireTime)
+    }
     return
 }
