@@ -14,6 +14,11 @@ func Get(idstr string) (post Post) {
     return
 }
 
+func GetAll(idstr string)(post []Post){
+    database.DB.Where("column_id = ?", idstr).Find(&post)
+    return
+}
+
 func GetBy(field, value string) (post Post) {
     database.DB.Where("? = ?", field, value).First(&post)
     return

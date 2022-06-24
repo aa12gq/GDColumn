@@ -58,6 +58,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			clcGroup.DELETE("/:id", middlewares.AuthJWT(), clc.Delete)
 		}
 		poc := new(controllers.PostsController)
+		v1.GET("/columns/:id/posts",poc.Index)
 		pocGroup := v1.Group("/posts")
 		{
 			pocGroup.POST("", middlewares.AuthJWT(), poc.Store)

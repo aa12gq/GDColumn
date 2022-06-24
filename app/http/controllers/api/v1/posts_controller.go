@@ -10,6 +10,7 @@ import (
     "GDColumn/pkg/snowflake"
     "github.com/gin-gonic/gin"
     "github.com/spf13/cast"
+    "net/http"
 )
 
 type PostsController struct {
@@ -117,4 +118,26 @@ func (ctrl *PostsController) Show(c *gin.Context) {
         return
     }
     response.Data(c, postModel)
+}
+
+func (ctrl *PostsController) Index(c *gin.Context) {
+
+    postModel := post.GetAll(c.Param("id"))
+    for i := 0;i < len(postModel); i++ {
+       if postModel[i].ImageID != 0{
+           imgModel := image.Get(cast.ToString(postModel[i].ImageID))
+           image := &post.Image{
+               ID:  imgModel.ID,
+               URL: imgModel.URL,
+           }
+           postModel[i].Image = image
+       }
+    }
+
+    c.JSON(http.StatusOK,gin.H{
+        "count":len(postModel) + 1,
+        "list": postModel,
+        "pageSize":len(postModel),
+        "currentPage":1,
+    })
 }
