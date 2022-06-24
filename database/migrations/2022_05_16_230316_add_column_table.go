@@ -13,8 +13,8 @@ func init() {
     type Column struct {
         models.BaseModel
 
-        AvatarID     uint64 `gorm:"type:bigint"`
-        Author       uint64 `gorm:"type:bigint;`
+        AvatarID     string `gorm:"type:varchar(20)"`
+        Author       string `gorm:"type:varchar(20);`
         Title        string `gorm:"type:varchar(255);not null;index"`
         Description  string `gorm:"type:varchar(255);not null;index"`
 
@@ -22,7 +22,7 @@ func init() {
     }
 
     type Avatar struct {
-        ID  uint64 `gorm:"type:bigint;"`
+        ID  string `gorm:"type:varchar(20);"`
         URL string `gorm:"type:varchar(255);not null;index"`
     }
 

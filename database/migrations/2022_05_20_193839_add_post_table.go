@@ -14,11 +14,11 @@ func init() {
         models.BaseModel
 
         Title        string `gorm:"type:varchar(255);`
-        Content      string `gorm:"type:varchar(21589);not null;index"`
-        Excerpt      string `gorm:"type:varchar(21589);not null;index"`
-        AuthorID     uint64 `gorm:"type:bigint(20);not null;index"`
-        ImageID      uint64 `gorm:"type:bigint(20);not null;index"`
-        ColumnID     uint64 `gorm:"type:bigint(20);not null;index"`
+        Content      string `gorm:"type:varchar(255);not null;index"`
+        Excerpt      string `gorm:"type:varchar(255);not null;index"`
+        AuthorID     string `gorm:"type:varchar(20);not null;index"`
+        ImageID      string `gorm:"type:varchar(20);not null;index"`
+        ColumnID     string `gorm:"type:varchar(20);not null;index"`
 
         models.CommonTimestampsField
     }

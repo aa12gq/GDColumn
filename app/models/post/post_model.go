@@ -7,13 +7,13 @@ import (
 )
 
 type Post struct {
-    ID            uint64  `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+    ID            string  `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
     Title         string  `json:"title,omitempty" `
     Content       string  `json:"content,omitempty" `
     Excerpt       string  `json:"excerpt,omitempty" `
-    ImageID       uint64  `json:"-"`
-    AuthorID      uint64  `json:"-"`
-    ColumnID      uint64  `json:"column_id,omitempty"`
+    ImageID       string  `json:"-"`
+    AuthorID      string  `json:"-"`
+    ColumnID      string  `json:"column_id,omitempty"`
 
     Author        *user.User `json:"author,omitempty"`
     Image         *Image     `json:"image,omitempty"`
@@ -22,7 +22,7 @@ type Post struct {
 }
 
 type Image struct {
-    ID  uint64 `json:"id,omitempty"`
+    ID  string `json:"id,omitempty"`
     URL string `json:"url,omitempty"`
 }
 

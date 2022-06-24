@@ -4,6 +4,7 @@ import (
 	"GDColumn/app/models/user"
 	"GDColumn/pkg/helpers"
 	"GDColumn/pkg/snowflake"
+	"github.com/spf13/cast"
 
 	"github.com/bxcodec/faker/v3"
 )
@@ -19,10 +20,10 @@ func MakeUsers(times int) []user.User {
 	for i := 0; i < times; i++ {
 		model := user.User{
 			NickName:       faker.Username(),
-			ID:			    _id,
+			ID:			    cast.ToString(_id),
 			Email:    		faker.Email(),
 			Description: 	"this is description",
-			ColumnID:     	cid,
+			ColumnID:     	cast.ToString(cid),
 			Phone:    		helpers.RandomNumber(11),
 			Password: 		"$2a$14$oPzVkIdwJ8KqY0erYAYQxOuAAlbI/sFIsH0C0R4MPc.3JbWWSuaUe",
 		}

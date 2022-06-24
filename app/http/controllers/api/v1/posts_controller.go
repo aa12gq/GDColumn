@@ -32,13 +32,13 @@ func (ctrl *PostsController) Store(c *gin.Context) {
     }
     id,_:=snowflake.GetID()
     postModel := &post.Post{
-        ID:         id,
+        ID:         cast.ToString(id),
         Title:      request.Title,
         Content:    request.Content,
         Excerpt:    request.Content,
-        ImageID:    cast.ToUint64(request.ColumnID),
-        AuthorID:   cast.ToUint64(request.AuthorID),
-        ColumnID:   cast.ToUint64(request.ColumnID),
+        ImageID:    request.ColumnID,
+        AuthorID:   request.AuthorID,
+        ColumnID:   request.ColumnID,
         Author:     &userModel,
         Image:      img,
     }
@@ -47,7 +47,7 @@ func (ctrl *PostsController) Store(c *gin.Context) {
         return
     }
     postModel.Create()
-    if postModel.ID > 0 {
+    if postModel.ID != "" {
         response.Data(c, postModel)
     } else {
         response.Abort500(c, "创建失败，请稍后尝试~")
@@ -57,7 +57,7 @@ func (ctrl *PostsController) Store(c *gin.Context) {
 func (ctrl *PostsController) Update(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
-    if postModel.ID == 0 {
+    if postModel.ID == "" {
         response.Abort404(c)
         return
     }
@@ -80,7 +80,7 @@ func (ctrl *PostsController) Update(c *gin.Context) {
 
     postModel.Title = request.Title
     postModel.Content = request.Content
-    postModel.ImageID = cast.ToUint64(request.ImageID)
+    postModel.ImageID =request.ImageID
     postModel.Image = image
 
     rowsAffected := postModel.Save()
@@ -94,7 +94,7 @@ func (ctrl *PostsController) Update(c *gin.Context) {
 func (ctrl *PostsController) Delete(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
-    if postModel.ID == 0 {
+    if postModel.ID == "" {
         response.Abort404(c)
         return
     }
@@ -113,7 +113,7 @@ func (ctrl *PostsController) Delete(c *gin.Context) {
 func (ctrl *PostsController) Show(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
-    if postModel.ID == 0 {
+    if postModel.ID == "" {
         response.Abort404(c)
         return
     }
@@ -124,7 +124,7 @@ func (ctrl *PostsController) Index(c *gin.Context) {
 
     postModel := post.GetAll(c.Param("id"))
     for i := 0;i < len(postModel); i++ {
-       if postModel[i].ImageID != 0{
+       if postModel[i].ImageID != ""{
            imgModel := image.Get(cast.ToString(postModel[i].ImageID))
            image := &post.Image{
                ID:  imgModel.ID,

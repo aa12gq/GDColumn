@@ -7,7 +7,7 @@ import (
     "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
-    "strconv"
+    "github.com/spf13/cast"
 
     "github.com/gin-gonic/gin"
 )
@@ -25,15 +25,15 @@ func (ctrl *ColumnsController) Store(c *gin.Context) {
     }
     _id,_ := snowflake.GetID()
     author := auth.CurrentUID(c)
-    Aid,_ := strconv.ParseUint(author, 10, 64)
+    //Aid,_ := strconv.ParseUint(author, 10, 64)
     columnModel := column.Column{
-       ID:          _id,
-       Author:      Aid,
+       ID:          cast.ToString(_id),
+       Author:      author,
        Title:       request.Title,
        Description: request.Description,
     }
     columnModel.Create()
-    if columnModel.ID > 0 {
+    if columnModel.ID != "" {
         response.Created(c, columnModel)
     } else {
         response.Abort500(c, "创建失败，请稍后尝试~")
@@ -55,8 +55,8 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
 
     currentUser := auth.CurrentUser(c)
 
-    columnModel := column.Get(strconv.FormatUint(currentUser.ColumnID,10))
-    if columnModel.ID == 0 {
+    columnModel := column.Get(currentUser.ColumnID)
+    if columnModel.ID == "" {
         response.Abort404(c)
         return
     }
@@ -77,7 +77,7 @@ func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
     userModel := auth.CurrentUser(c)
     // 验证 url 参数 id 是否正确
     columnModel := column.Get(c.Param("id"))
-    if columnModel.ID == 0 {
+    if columnModel.ID == "" {
         response.Abort404(c)
         return
     }else if columnModel.Author != userModel.ID{
@@ -85,7 +85,7 @@ func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
         return
     }
 
-    if columnModel.ID > 0 {
+    if columnModel.ID > "" {
         response.Data(c, columnModel)
     } else {
         response.Abort500(c)
@@ -109,13 +109,13 @@ func (ctrl *ColumnsController) Index(c *gin.Context) {
 func (ctrl *ColumnsController) Delete(c *gin.Context) {
 
     columnModel := column.Get(c.Param("id"))
-    if columnModel.ID == 0 {
+    if columnModel.ID == "" {
         response.Abort404(c)
         return
     }
     author := auth.CurrentUID(c)
-    Aid,_ := strconv.ParseUint(author, 10, 64)
-    if Aid == columnModel.Author {
+    //Aid,_ := strconv.ParseUint(author, 10, 64)
+    if author == columnModel.Author {
         rowsAffected := columnModel.Delete()
         if rowsAffected > 0 {
             response.Success(c)

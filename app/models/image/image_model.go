@@ -6,7 +6,7 @@ import (
 )
 
 type Image struct {
-    ID       uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+    ID       string `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
     URL      string `json:"url"`
 
     models.CommonTimestampsField

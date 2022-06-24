@@ -11,6 +11,7 @@ import (
 	"GDColumn/pkg/snowflake"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 )
 
 type SignupController struct {
@@ -45,7 +46,8 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		return
 	}
 
-	userID, err := snowflake.GetID()
+	uid, err := snowflake.GetID()
+	userID := cast.ToString(uid)
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
@@ -59,7 +61,7 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 	}
 	userModel.Create()
 
-	if userModel.ID > 0 {
+	if userModel.ID != "" {
 		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
 		response.CreatedJSON(c, gin.H{
 			"token": token,
@@ -77,14 +79,16 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		return
 	}
 
-	userID, err := snowflake.GetID()
+	uid, err := snowflake.GetID()
+	userID := cast.ToString(uid)
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 		return
 	}
 
-	columnID, err := snowflake.GetID()
+	cid, err := snowflake.GetID()
+	columnID := cast.ToString(cid)
 	if err != nil {
 		logger.ErrorString("Auth","GetID",err.Error())
 		response.Abort500(c, "创建专栏失败，请稍后尝试~")
@@ -108,7 +112,7 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	}
 	userModel.Create()
 
-	if userModel.ID > 0 {
+	if userModel.ID != "" {
 		//token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.NickName)
 		response.Created(c,userModel)
 	} else {

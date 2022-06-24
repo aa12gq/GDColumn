@@ -9,9 +9,9 @@ import (
 )
 
 type User struct {
-	ID           uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
-	ColumnID  	 uint64 `json:"-"`
-	AvatarID     uint64 `json:"-"`
+	ID           string `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
+	ColumnID  	 string `json:"-"`
+	AvatarID     string `json:"-"`
 	NickName     string `json:"nick_name,omitempty"`
 	Description  string `json:"description,omitempty"`
 	Email    	 string `json:"email,omitempty"`
@@ -25,7 +25,7 @@ type User struct {
 }
 
 type Image struct {
-	ID  uint64 `json:"id,omitempty"`
+	ID  string `json:"id,omitempty"`
 	URL string `json:"url,omitempty"`
 }
 

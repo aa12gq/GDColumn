@@ -10,7 +10,7 @@ import (
 // Attempt 尝试登录
 func Attempt(email, password string)(user.User,error){
 	userModel := user.GetByMulti(email)
-	if userModel.ID == 0{
+	if userModel.ID == ""{
 		return user.User{},errors.New("用户不存在")
 	}
 	if !userModel.ComparePassword(password){
@@ -21,7 +21,7 @@ func Attempt(email, password string)(user.User,error){
 
 func LoginByPhone(phone string) (user.User, error) {
 	userModel := user.GetByPhone(phone)
-	if userModel.ID == 0 {
+	if userModel.ID == "" {
 		return user.User{}, errors.New("手机号未注册")
 	}
 

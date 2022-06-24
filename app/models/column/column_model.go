@@ -6,18 +6,18 @@ import (
 )
 
 type Column struct {
-    ID          uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id,omitempty"`
+    ID          string `gorm:"column:id;primaryKey;autoIncrement;" json:"id,omitempty"`
     Title       string `json:"title,omitempty"`
     Description string `json:"description,omitempty"`
-    AvatarID    uint64 `json:"-"`
+    AvatarID    string `json:"-"`
 
     Avatar      *Image  `json:"avatar,omitempty"`
-    Author      uint64 `json:"author,omitempty"`
+    Author      string `json:"author,omitempty"`
     models.CommonTimestampsField
 }
 
 type Image struct {
-    ID  uint64 `json:"id,omitempty"`
+    ID  string `json:"id,omitempty"`
     URL string `json:"url,omitempty"`
 }
 

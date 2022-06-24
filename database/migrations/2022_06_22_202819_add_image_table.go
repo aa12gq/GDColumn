@@ -13,7 +13,7 @@ func init() {
     type Image struct {
         models.BaseModel
 
-        URL          string `gorm:"type:varchar(255);not null;index"`
+        URL   string `gorm:"type:varchar(255);not null;index"`
 
         models.CommonTimestampsField
     }

@@ -31,7 +31,7 @@ func (ctrl *ImagesController) Upload(c *gin.Context) {
         response.Abort500(c, "上传头像失败，请稍后尝试~")
         return
     }
-    imageModel.ID = avatarId
+    imageModel.ID = cast.ToString(avatarId)
     imageModel.CreatedAt = time.Now()
     imageModel.UpdatedAt = time.Now()
     imageModel.Save()
