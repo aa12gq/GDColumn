@@ -7,7 +7,7 @@ import (
 )
 
 type ImageRequest struct {
-	Image *multipart.FileHeader `valid:"image" form:"image"`
+	Image *multipart.FileHeader `valid:"file" form:"file"`
 }
 
 func ImageUpload(data interface{}, c *gin.Context) map[string][]string {
@@ -17,10 +17,10 @@ func ImageUpload(data interface{}, c *gin.Context) map[string][]string {
 		// - 1024 bytes 为 1kb
 		// - 1048576 bytes 为 1mb
 		// - 20971520 bytes 为 20mb
-		"file:image": []string{"ext:png,jpg,jpeg", "size:20971520", "required"},
+		"file:file": []string{"ext:png,jpg,jpeg", "size:20971520", "required"},
 	}
 	messages := govalidator.MapData{
-		"file:image": []string{
+		"file:file": []string{
 			"ext:ext图片只能上传 png, jpg, jpeg 任意一种的图片",
 			"size:图片文件最大不能超过 20MB",
 			"required:必须上传图片",

@@ -51,7 +51,7 @@ func ValidateSignupEmailExist(data interface{}, c *gin.Context) map[string][]str
 
 type SignupUsingPhoneRequest struct {
 	Phone           string `json:"phone,omitempty" valid:"phone"`
-	NickName            string `valid:"nick_name" json:"nick_name"`
+	NickName        string `valid:"nick_name" json:"nick_name"`
 	Password        string `valid:"password" json:"password,omitempty"`
 	PasswordConfirm string `valid:"password_confirm" json:"password_confirm,omitempty"`
 }
@@ -60,7 +60,7 @@ func SignupUsingPhone(data interface{}, c *gin.Context) map[string][]string {
 
 	rules := govalidator.MapData{
 		"phone":            []string{"required", "digits:11", "not_exists:users,phone"},
-		"nick_name":        []string{"required", "alpha_num", "between:3,20", "not_exists:users,name"},
+		"nick_name":        []string{"required", "min:2","max:20", "not_exists:users,nick_name"},
 		"password":         []string{"required", "min:6"},
 		"password_confirm": []string{"required"},
 	}
@@ -72,8 +72,8 @@ func SignupUsingPhone(data interface{}, c *gin.Context) map[string][]string {
 		},
 		"nick_name": []string{
 			"required:用户名为必填项",
-			"alpha_num:用户名格式错误，只允许数字和英文",
-			"between:用户名长度需在 3~20 之间",
+			"min:用户名长度需在 2~20 之间",
+			"max:用户名长度需在 2~20 之间",
 		},
 		"password": []string{
 			"required:密码为必填项",
@@ -94,7 +94,7 @@ func SignupUsingPhone(data interface{}, c *gin.Context) map[string][]string {
 
 type SignupUsingEmailRequest struct {
 	Email           string `json:"email,omitempty" valid:"email"`
-	NickName        string `valid:"nick_name" json:"nick_name"`
+	NickName        string `valid:"nickName" json:"nickName"`
 	Password        string `valid:"password" json:"password,omitempty"`
 	PasswordConfirm string `valid:"password_confirm" json:"password_confirm,omitempty"`
 }
@@ -103,7 +103,7 @@ func SignupUsingEmail(data interface{}, c *gin.Context) map[string][]string {
 
 	rules := govalidator.MapData{
 		"email":            []string{"required", "min:4", "max:30", "email", "not_exists:users,email"},
-		"nick_name":        []string{"required", "alpha_num", "between:3,20", "not_exists:users,nick_name"},
+		"nickName":        []string{"required", "min:2","max:20", "not_exists:users,nick_name"},
 		"password":         []string{"required", "min:6"},
 		"password_confirm": []string{"required"},
 	}
@@ -116,10 +116,10 @@ func SignupUsingEmail(data interface{}, c *gin.Context) map[string][]string {
 			"email:Email 格式不正确，请提供有效的邮箱地址",
 			"not_exists:Email 已被占用",
 		},
-		"nick_name": []string{
+		"nickName": []string{
 			"required:用户名为必填项",
-			"alpha_num:用户名格式错误，只允许数字和英文",
-			"between:用户名长度需在 3~20 之间",
+			"min:用户名长度需在 2~20 之间",
+			"max:用户名长度需在 2~20 之间",
 		},
 		"password": []string{
 			"required:密码为必填项",

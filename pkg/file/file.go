@@ -41,16 +41,12 @@ func SaveUploadImage(id string, c *gin.Context, file *multipart.FileHeader) (ava
 	publicPath := "public"
 	dirName := fmt.Sprintf("/uploads/images/")
 	os.MkdirAll(publicPath+dirName, 0755)
-
-	suffix := path.Ext(file.Filename)
-	fileName := fileNameFromUploadFile(id,file)
-	avatarPath = publicPath + dirName + fileName
-	if err := c.SaveUploadedFile(file, avatarPath); err != nil {
+	if err := c.SaveUploadedFile(file, publicPath + dirName + fileNameFromUploadFile(id,file)); err != nil {
 		return avatar, err
 	}
 
 	pwd,_ := os.Getwd()
-	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,id,suffix)
+	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,id,path.Ext(file.Filename))
 	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",id,".jpg"),
 		imgPwd,oss.ContentType("image/jpg"));
 	os.Remove(imgPwd)

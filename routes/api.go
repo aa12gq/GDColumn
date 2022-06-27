@@ -58,7 +58,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		clcGroup := v1.Group("/columns")
 		{
 			clcGroup.GET("", clc.Index)
-			clcGroup.GET("/:id", middlewares.AuthJWT(), clc.CurrentColumn)
+			clcGroup.GET("/:id", clc.CurrentColumn)
 			clcGroup.POST("", middlewares.AuthJWT(), clc.Store)
 			clcGroup.PUT("", middlewares.AuthJWT(), clc.Update)
 			clcGroup.DELETE("/:id", middlewares.AuthJWT(), clc.Delete)

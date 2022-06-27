@@ -13,6 +13,11 @@ func Get(idstr string) (column Column) {
     return
 }
 
+func GetImage(idstr string) (imageModel Image) {
+    database.DB.Where("id", idstr).First(&imageModel)
+    return
+}
+
 func GetBy(field, value string) (column Column) {
     database.DB.Where("? = ?", field, value).First(&column)
     return

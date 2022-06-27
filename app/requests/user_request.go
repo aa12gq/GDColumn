@@ -10,7 +10,7 @@ import (
 
 type UserUpdateProfileRequest struct {
     AvatarID     string `valid:"avatar_id" json:"avatar_id"`
-    NickName     string `valid:"nick_name" json:"nick_name"`
+    NickName     string `valid:"nickName" json:"nickName"`
     Description  string `valid:"description" json:"description"`
 }
 
@@ -20,7 +20,7 @@ func UserUpdateProfile(data interface{}, c *gin.Context) map[string][]string {
     uid := auth.CurrentUID(c)
     rules := govalidator.MapData{
         "avatar_id":     []string{"min:6"},
-        "nick_name":     []string{"required", "alpha_num", "between:3,20", "not_exists:users,nick_name," + uid},
+        "nickName":     []string{"between:3,20", "not_exists:users,nick_name," + uid},
         "description":   []string{"min_cn:4", "max_cn:240"},
     }
 
@@ -28,9 +28,7 @@ func UserUpdateProfile(data interface{}, c *gin.Context) map[string][]string {
         "avatar_id":  []string{
           "min:图片id最小为 6 位",
         },
-        "nick_name":  []string{
-            "required:用户名为必填项",
-            "alpha_num:用户名格式错误，只允许数字和英文",
+        "nickName":  []string{
             "between:用户名长度需在 3~20 之间",
             "not_exists:用户名已被占用",
         },

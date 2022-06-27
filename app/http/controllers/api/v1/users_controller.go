@@ -46,20 +46,34 @@ func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
     if ok := requests.Validate(c, &request, requests.UserUpdateProfile); !ok {
         return
     }
-
-    imgModel := image.Get(request.AvatarID)
-    avatar := &user.Image{
-      ID:  imgModel.ID,
-      URL:imgModel.URL,
+    currentUser := auth.CurrentUser(c)
+    var avatar *user.Image
+    switch  {
+    case request.NickName != "":
+        currentUser.NickName = request.NickName
+        fallthrough
+    case request.Description != "":
+        currentUser.Description = request.Description
+        fallthrough
+    case request.AvatarID == "":
+        imgModel := image.Get(currentUser.AvatarID)
+        avatar = &user.Image{
+           ID:  imgModel.ID,
+           URL: imgModel.URL,
+        }
+        currentUser.Avatar = avatar
+    case request.AvatarID != "":
+        imgModel := image.Get(request.AvatarID)
+        avatar = &user.Image{
+            ID:  imgModel.ID,
+            URL: imgModel.URL,
+        }
+        currentUser.AvatarID = imgModel.ID
+        currentUser.Avatar = avatar
     }
 
-    currentUser := auth.CurrentUser(c)
-    currentUser.NickName = request.NickName
-    currentUser.Description = request.Description
-    currentUser.AvatarID = imgModel.ID
-
-    rowsAffected := currentUser.Save()
-    currentUser.Avatar = avatar
+    rowsAffected := currentUser.Updates(currentUser.ID,request.AvatarID,request.NickName,request.Description)
+    currentUser = user.Get(currentUser.ID)
     if rowsAffected > 0 {
         response.Data(c, currentUser)
     } else {
@@ -115,7 +129,6 @@ func (ctrl *UsersController) UpdatePassword(c *gin.Context) {
     // 验证原始密码是否正确
     _, err := auth.Attempt(currentUser.NickName, request.Password)
     if err != nil {
-        // 失败，显示错误提示
         response.Unauthorized(c, "原密码不正确")
     } else {
         // 更新密码为新密码

@@ -1,15 +1,14 @@
 package v1
 
 import (
-    "GDColumn/app/requests"
     "GDColumn/app/models/image"
+    "GDColumn/app/requests"
     "GDColumn/pkg/file"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
-    "github.com/gin-gonic/gin"
     "fmt"
+    "github.com/gin-gonic/gin"
     "github.com/spf13/cast"
-    "time"
 )
 
 type ImagesController struct {
@@ -32,8 +31,6 @@ func (ctrl *ImagesController) Upload(c *gin.Context) {
         return
     }
     imageModel.ID = cast.ToString(avatarId)
-    imageModel.CreatedAt = time.Now()
-    imageModel.UpdatedAt = time.Now()
     imageModel.Save()
     response.Data(c, imageModel)
 }

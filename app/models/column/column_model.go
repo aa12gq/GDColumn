@@ -34,3 +34,29 @@ func (column *Column) Delete() (rowsAffected int64) {
     result := database.DB.Delete(&column)
     return result.RowsAffected
 }
+
+func (columnModel *Column) Updates(id,image,title,des string) (rowsAffected int64) {
+
+    if image != "" && title != "" && des != ""{
+        result := database.DB.Model(&columnModel).
+            Select("avatar_id","title","description").
+            Updates(map[string]interface{}{"avatar_id":image,"title":title,"description":des})
+        return result.RowsAffected
+    }else if image != ""{
+        result := database.DB.Model(&columnModel).
+            Select("avatar_id").
+            Updates(map[string]interface{}{"avatar_id":image})
+        return result.RowsAffected
+    }else if title != ""{
+        result := database.DB.Model(&columnModel).
+            Select("title").
+            Updates(map[string]interface{}{"title":title})
+        return result.RowsAffected
+    }else if des != "" {
+        result := database.DB.Model(&columnModel).
+            Select("description").
+            Updates(map[string]interface{}{"description":des})
+        return result.RowsAffected
+    }
+    return 0
+}

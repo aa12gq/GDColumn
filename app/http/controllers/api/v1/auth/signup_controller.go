@@ -96,13 +96,12 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	}
 	columnModel := column.Column{
 		ID:                    columnID,
-		Title:                 fmt.Sprintf("这是的%v专栏，有一段非常有意思的简介，可以更新一下欧",request.NickName),
+		Title:                 fmt.Sprintf("这里是%v专栏，有一段非常有意思的简介，可以更新一下欧",request.NickName),
 		Description:           fmt.Sprintf("%v的专栏",request.NickName),
 		Author:                userID,
 	}
 	columnModel.Create()
 
-	// 2. 验证成功，创建数据
 	userModel := user.User{
 		NickName:     request.NickName,
 		Email:    	  request.Email,

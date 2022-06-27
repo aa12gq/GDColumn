@@ -14,6 +14,11 @@ func Get(idstr string) (post Post) {
     return
 }
 
+func GetImage(idstr string) (imageModel Image) {
+    database.DB.Where("id", idstr).First(&imageModel)
+    return
+}
+
 func GetAll(idstr string)(post []Post){
     database.DB.Where("column_id = ?", idstr).Find(&post)
     return
@@ -35,10 +40,10 @@ func IsExist(field, value string) bool {
     return count > 0
 }
 
-func Paginate(c *gin.Context, perPage int) (posts []Post, paging paginator.Paging) {
+func Paginate(c *gin.Context, perPage int,id string) (posts []Post, paging paginator.Paging) {
     paging = paginator.Paginate(
         c,
-        database.DB.Model(Post{}),
+        database.DB.Where("column_id = ?",id).Model(Post{}),
         &posts,
         app.V1URL(database.TableName(&Post{})),
         perPage,

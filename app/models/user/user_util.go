@@ -39,8 +39,8 @@ func Get(idstr string) (userModel User) {
 	return
 }
 
-func GetAvatar(idstr string) (avatarModel Image) {
-	database.DB.Where("id", idstr).First(&avatarModel)
+func GetImage(idstr string) (imageModel Image) {
+	database.DB.Where("id", idstr).First(&imageModel)
 	return
 }
 

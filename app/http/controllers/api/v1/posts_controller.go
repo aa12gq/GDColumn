@@ -42,10 +42,6 @@ func (ctrl *PostsController) Store(c *gin.Context) {
         Author:     &userModel,
         Image:      img,
     }
-    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
-        response.Abort403(c)
-        return
-    }
     postModel.Create()
     if postModel.ID != "" {
         response.Data(c, postModel)
@@ -61,29 +57,36 @@ func (ctrl *PostsController) Update(c *gin.Context) {
         response.Abort404(c)
         return
     }
-
-    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
-        response.Abort403(c)
-        return
-    }
-
     request := requests.PostRequest{}
     if ok := requests.Validate(c, &request, requests.PostSave); !ok {
         return
     }
-
-    imgModel := image.Get(request.ImageID)
-    image := &post.Image{
-        ID:  imgModel.ID,
-        URL:imgModel.URL,
+    if ok := policies.CanModifyPost(c, postModel.AuthorID); !ok {
+        response.Abort403(c)
+        return
+    }
+    switch {
+    case postModel.ID == "":
+        response.Abort404(c)
+        break
+    case request.ImageID != "":
+        imgModel := image.Get(request.ImageID)
+        image := &post.Image{
+            ID:  imgModel.ID,
+            URL:imgModel.URL,
+        }
+        postModel.ImageID = request.ImageID
+        postModel.Image = image
+        fallthrough
+    case request.Content != "":
+        postModel.Content = request.Content
+        fallthrough
+    case request.Title != "":
+        postModel.Title = request.Title
     }
 
-    postModel.Title = request.Title
-    postModel.Content = request.Content
-    postModel.ImageID =request.ImageID
-    postModel.Image = image
-
-    rowsAffected := postModel.Save()
+    rowsAffected := postModel.Updates(postModel.ID,request.ImageID,request.Title,request.Content)
+    postModel = post.Get(c.Param("id"))
     if rowsAffected > 0 {
         response.Data(c, postModel)
     } else {
@@ -104,7 +107,11 @@ func (ctrl *PostsController) Delete(c *gin.Context) {
     }
     rowsAffected := postModel.Delete()
     if rowsAffected > 0 {
-        response.Success(c)
+        c.JSON(http.StatusOK, gin.H{
+            "success": true,
+            "message": "删除成功！",
+            "data":postModel,
+        })
         return
     }
     response.Abort500(c, "删除失败，请稍后尝试~")
@@ -113,9 +120,17 @@ func (ctrl *PostsController) Delete(c *gin.Context) {
 func (ctrl *PostsController) Show(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
-    if postModel.ID == "" {
+    switch {
+    case postModel.ID == "":
         response.Abort404(c)
-        return
+        break
+    case postModel.Author.AvatarID != "":
+        imgModel := image.Get(postModel.Author.AvatarID)
+        img := &user.Image{
+            ID:imgModel.ID,
+            URL:imgModel.URL,
+        }
+        postModel.Author.Avatar = img
     }
     response.Data(c, postModel)
 }
@@ -133,11 +148,19 @@ func (ctrl *PostsController) Index(c *gin.Context) {
            postModel[i].Image = image
        }
     }
-
-    c.JSON(http.StatusOK,gin.H{
-        "count":len(postModel) + 1,
-        "list": postModel,
-        "pageSize":len(postModel),
-        "currentPage":1,
-    })
+    data,pager :=  post.Paginate(c,5,c.Param("id"))
+    for i := 0; i<len(data) ;i++  {
+        if data[i].Author.AvatarID != ""{
+            imgModel := image.Get(cast.ToString(data[i].Author.AvatarID))
+            image := &user.Image{
+                ID:  imgModel.ID,
+                URL: imgModel.URL,
+            }
+            data[i].Author.Avatar = image
+        }
+    }
+     response.JSON(c, gin.H{
+         "data":  data,
+         "pager": pager,
+     })
 }

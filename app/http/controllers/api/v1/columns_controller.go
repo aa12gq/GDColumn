@@ -7,6 +7,7 @@ import (
     "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
+    "fmt"
     "github.com/spf13/cast"
 
     "github.com/gin-gonic/gin"
@@ -16,18 +17,16 @@ type ColumnsController struct {
     BaseAPIController
 }
 
-
 func (ctrl *ColumnsController) Store(c *gin.Context) {
 
     request := requests.ColumnRequest{}
     if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
         return
     }
-    _id,_ := snowflake.GetID()
+    Cid,_ := snowflake.GetID()
     author := auth.CurrentUID(c)
-    //Aid,_ := strconv.ParseUint(author, 10, 64)
     columnModel := column.Column{
-       ID:          cast.ToString(_id),
+       ID:          cast.ToString(Cid),
        Author:      author,
        Title:       request.Title,
        Description: request.Description,
@@ -47,24 +46,37 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
         return
     }
 
-    imgModel := image.Get(request.AvatarID)
-    avatar := &column.Image{
-        ID:  imgModel.ID,
-        URL:imgModel.URL,
-    }
-
     currentUser := auth.CurrentUser(c)
-
     columnModel := column.Get(currentUser.ColumnID)
-    if columnModel.ID == "" {
+    var avatar *column.Image
+    switch {
+    case columnModel.ID == "":
         response.Abort404(c)
-        return
+        break
+    case request.Title != "":
+        columnModel.Title = request.Title
+        fallthrough
+    case request.Description != "":
+        columnModel.Description = request.Description
+        fallthrough
+    case request.AvatarID != "":
+        imgModel := image.Get(request.AvatarID)
+        avatar = &column.Image{
+            ID:  imgModel.ID,
+            URL:imgModel.URL,
+        }
+        columnModel.Avatar = avatar
     }
-    columnModel.Title = request.Title
-    columnModel.Description = request.Description
-    columnModel.Avatar = avatar
-
-    rowsAffected := columnModel.Save()
+    if request.AvatarID == "" {
+        fmt.Println("11", columnModel.AvatarID)
+        imgModel := image.Get(columnModel.AvatarID)
+        avatar = &column.Image{
+            ID:  imgModel.ID,
+            URL: imgModel.URL,
+        }
+        columnModel.Avatar = avatar
+    }
+    rowsAffected := columnModel.Updates(columnModel.ID,request.AvatarID,request.Title,request.Description)
     if rowsAffected > 0 {
         response.Data(c, columnModel)
     } else {
@@ -74,15 +86,18 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
 
 func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
 
-    userModel := auth.CurrentUser(c)
-    // 验证 url 参数 id 是否正确
     columnModel := column.Get(c.Param("id"))
-    if columnModel.ID == "" {
+    switch {
+    case columnModel.ID == "":
         response.Abort404(c)
-        return
-    }else if columnModel.Author != userModel.ID{
-        response.Abort403(c)
-        return
+        break
+    case columnModel.AvatarID != "":
+        imgModel := image.Get(columnModel.AvatarID)
+        avatar := &column.Image{
+            ID:  imgModel.ID,
+            URL: imgModel.URL,
+        }
+        columnModel.Avatar = avatar
     }
 
     if columnModel.ID > "" {
@@ -114,7 +129,6 @@ func (ctrl *ColumnsController) Delete(c *gin.Context) {
         return
     }
     author := auth.CurrentUID(c)
-    //Aid,_ := strconv.ParseUint(author, 10, 64)
     if author == columnModel.Author {
         rowsAffected := columnModel.Delete()
         if rowsAffected > 0 {

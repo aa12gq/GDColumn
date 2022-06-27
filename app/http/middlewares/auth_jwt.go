@@ -24,7 +24,7 @@ func AuthJWT() gin.HandlerFunc {
 			return
 		}
 		//id := strconv.FormatUint(userModel.AvatarID,10)
-		avatarModel := user.GetAvatar(userModel.AvatarID)
+		avatarModel := user.GetImage(userModel.AvatarID)
 
 		c.Set("current_user_id", userModel.GetStringID())
 		c.Set("current_user_name", userModel.NickName)
