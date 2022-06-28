@@ -9,7 +9,7 @@ import (
 )
 
 type UserUpdateProfileRequest struct {
-    AvatarID     string `valid:"avatar_id" json:"avatar_id"`
+    AvatarID     string `valid:"avatarId" json:"avatarId"`
     NickName     string `valid:"nickName" json:"nickName"`
     Description  string `valid:"description" json:"description"`
 }
@@ -19,13 +19,13 @@ func UserUpdateProfile(data interface{}, c *gin.Context) map[string][]string {
     // 查询用户名重复时，过滤掉当前用户 ID
     uid := auth.CurrentUID(c)
     rules := govalidator.MapData{
-        "avatar_id":     []string{"min:6"},
+        "avatarId":     []string{"min:6"},
         "nickName":     []string{"between:3,20", "not_exists:users,nick_name," + uid},
         "description":   []string{"min_cn:4", "max_cn:240"},
     }
 
     messages := govalidator.MapData{
-        "avatar_id":  []string{
+        "avatarId":  []string{
           "min:图片id最小为 6 位",
         },
         "nickName":  []string{

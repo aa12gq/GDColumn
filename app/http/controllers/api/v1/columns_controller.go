@@ -7,7 +7,6 @@ import (
     "GDColumn/pkg/auth"
     "GDColumn/pkg/response"
     "GDColumn/pkg/snowflake"
-    "fmt"
     "github.com/spf13/cast"
 
     "github.com/gin-gonic/gin"
@@ -45,38 +44,10 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
     if ok := requests.Validate(c, &request, requests.ColumnSave); !ok {
         return
     }
-
     currentUser := auth.CurrentUser(c)
     columnModel := column.Get(currentUser.ColumnID)
-    var avatar *column.Image
-    switch {
-    case columnModel.ID == "":
-        response.Abort404(c)
-        break
-    case request.Title != "":
-        columnModel.Title = request.Title
-        fallthrough
-    case request.Description != "":
-        columnModel.Description = request.Description
-        fallthrough
-    case request.AvatarID != "":
-        imgModel := image.Get(request.AvatarID)
-        avatar = &column.Image{
-            ID:  imgModel.ID,
-            URL:imgModel.URL,
-        }
-        columnModel.Avatar = avatar
-    }
-    if request.AvatarID == "" {
-        fmt.Println("11", columnModel.AvatarID)
-        imgModel := image.Get(columnModel.AvatarID)
-        avatar = &column.Image{
-            ID:  imgModel.ID,
-            URL: imgModel.URL,
-        }
-        columnModel.Avatar = avatar
-    }
-    rowsAffected := columnModel.Updates(columnModel.ID,request.AvatarID,request.Title,request.Description)
+    rowsAffected := columnModel.Updates(request.AvatarID,request.Title,request.Description)
+    columnModel = column.Get(currentUser.ColumnID)
     if rowsAffected > 0 {
         response.Data(c, columnModel)
     } else {

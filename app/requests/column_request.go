@@ -6,7 +6,7 @@ import (
 )
 
 type ColumnRequest struct {
-    AvatarID    string `valid:"avatar_id" json:"avatar_id"`
+    AvatarID    string `valid:"avatarId" json:"avatarId"`
     Title       string `valid:"title" json:"title,omitempty"`
     Description string `valid:"description" json:"description,omitempty"`
 }
@@ -14,12 +14,12 @@ type ColumnRequest struct {
 func ColumnSave(data interface{}, c *gin.Context) map[string][]string {
 
     rules := govalidator.MapData{
-        "avatar_id":     []string{"min:6"},
+        "avatarId":     []string{"min:6"},
         "title":        []string{"min_cn:2", "max_cn:20"},
         "description": []string{"min_cn:3", "max_cn:255"},
     }
     messages := govalidator.MapData{
-        "avatar_id":  []string{
+        "avatarId":  []string{
             "min:图片id最小为 6 位",
         },
         "title": []string{

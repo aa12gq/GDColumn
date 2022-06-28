@@ -13,9 +13,9 @@ func init() {
     type Post struct {
         models.BaseModel
 
-        Title        string `gorm:"type:varchar(255);`
-        Content      string `gorm:"type:varchar(255);not null;index"`
-        Excerpt      string `gorm:"type:varchar(255);not null;index"`
+        Title        string `gorm:"type:varchar(255);index`
+        Content      string `gorm:"type:longtext;not null;"`
+        Excerpt      string `gorm:"type:longtext;not null;"`
         AuthorID     string `gorm:"type:varchar(20);not null;index"`
         ImageID      string `gorm:"type:varchar(20);not null;index"`
         ColumnID     string `gorm:"type:varchar(20);not null;index"`

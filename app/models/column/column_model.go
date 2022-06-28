@@ -11,14 +11,15 @@ type Column struct {
     Description string `json:"description,omitempty"`
     AvatarID    string `json:"-"`
 
-    Avatar      *Image  `json:"avatar,omitempty"`
+    Avatar      *Image  `json:"avatar"`
     Author      string `json:"author,omitempty"`
+
     models.CommonTimestampsField
 }
 
 type Image struct {
-    ID  string `json:"id,omitempty"`
-    URL string `json:"url,omitempty"`
+    ID  string `json:"id"`
+    URL string `json:"url"`
 }
 
 func (column *Column) Create() {
@@ -35,28 +36,8 @@ func (column *Column) Delete() (rowsAffected int64) {
     return result.RowsAffected
 }
 
-func (columnModel *Column) Updates(id,image,title,des string) (rowsAffected int64) {
-
-    if image != "" && title != "" && des != ""{
-        result := database.DB.Model(&columnModel).
-            Select("avatar_id","title","description").
-            Updates(map[string]interface{}{"avatar_id":image,"title":title,"description":des})
-        return result.RowsAffected
-    }else if image != ""{
-        result := database.DB.Model(&columnModel).
-            Select("avatar_id").
-            Updates(map[string]interface{}{"avatar_id":image})
-        return result.RowsAffected
-    }else if title != ""{
-        result := database.DB.Model(&columnModel).
-            Select("title").
-            Updates(map[string]interface{}{"title":title})
-        return result.RowsAffected
-    }else if des != "" {
-        result := database.DB.Model(&columnModel).
-            Select("description").
-            Updates(map[string]interface{}{"description":des})
-        return result.RowsAffected
-    }
-    return 0
+func (columnModel *Column) Updates(image,title,des string) (rowsAffected int64) {
+    result := database.DB.Model(&columnModel).
+        First(&Column{}).Updates(&Column{AvatarID:image,Title:title,Description:des})
+    return result.RowsAffected
 }

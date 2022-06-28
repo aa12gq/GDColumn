@@ -1,7 +1,6 @@
 package v1
 
 import (
-    "GDColumn/app/models/image"
     "GDColumn/app/models/user"
     "GDColumn/app/requests"
     "GDColumn/pkg/auth"
@@ -16,15 +15,7 @@ type UsersController struct {
 
 func (ctrl *UsersController) CurrentUser(c *gin.Context) {
     userModel := auth.CurrentUser(c)
-
-    currentUser := user.User{
-        ID : userModel.ID,
-        Email : userModel.Email,
-        NickName : userModel.NickName,
-        ColumnID : userModel.ColumnID,
-    }
-
-    response.Data(c, currentUser)
+    response.Data(c, userModel)
 }
 
 func (ctrl *UsersController) Index(c *gin.Context) {
@@ -47,32 +38,7 @@ func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
         return
     }
     currentUser := auth.CurrentUser(c)
-    var avatar *user.Image
-    switch  {
-    case request.NickName != "":
-        currentUser.NickName = request.NickName
-        fallthrough
-    case request.Description != "":
-        currentUser.Description = request.Description
-        fallthrough
-    case request.AvatarID == "":
-        imgModel := image.Get(currentUser.AvatarID)
-        avatar = &user.Image{
-           ID:  imgModel.ID,
-           URL: imgModel.URL,
-        }
-        currentUser.Avatar = avatar
-    case request.AvatarID != "":
-        imgModel := image.Get(request.AvatarID)
-        avatar = &user.Image{
-            ID:  imgModel.ID,
-            URL: imgModel.URL,
-        }
-        currentUser.AvatarID = imgModel.ID
-        currentUser.Avatar = avatar
-    }
-
-    rowsAffected := currentUser.Updates(currentUser.ID,request.AvatarID,request.NickName,request.Description)
+    rowsAffected := currentUser.Updates(request.AvatarID,request.NickName,request.Description)
     currentUser = user.Get(currentUser.ID)
     if rowsAffected > 0 {
         response.Data(c, currentUser)

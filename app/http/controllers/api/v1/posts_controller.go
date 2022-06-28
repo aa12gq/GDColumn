@@ -31,11 +31,12 @@ func (ctrl *PostsController) Store(c *gin.Context) {
        URL:imgModel.URL,
     }
     id,_:=snowflake.GetID()
+    var r = []rune(request.Content)
     postModel := &post.Post{
         ID:         cast.ToString(id),
         Title:      request.Title,
         Content:    request.Content,
-        Excerpt:    request.Content,
+        Excerpt:    string(r[:20]),
         ImageID:    request.ColumnID,
         AuthorID:   request.AuthorID,
         ColumnID:   request.ColumnID,
@@ -65,27 +66,7 @@ func (ctrl *PostsController) Update(c *gin.Context) {
         response.Abort403(c)
         return
     }
-    switch {
-    case postModel.ID == "":
-        response.Abort404(c)
-        break
-    case request.ImageID != "":
-        imgModel := image.Get(request.ImageID)
-        image := &post.Image{
-            ID:  imgModel.ID,
-            URL:imgModel.URL,
-        }
-        postModel.ImageID = request.ImageID
-        postModel.Image = image
-        fallthrough
-    case request.Content != "":
-        postModel.Content = request.Content
-        fallthrough
-    case request.Title != "":
-        postModel.Title = request.Title
-    }
-
-    rowsAffected := postModel.Updates(postModel.ID,request.ImageID,request.Title,request.Content)
+    rowsAffected := postModel.Updates(request.ImageID,request.Title,request.Content)
     postModel = post.Get(c.Param("id"))
     if rowsAffected > 0 {
         response.Data(c, postModel)
