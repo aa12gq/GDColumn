@@ -6,6 +6,9 @@ import (
 	"GDColumn/app/http/middlewares"
 	"GDColumn/pkg/config"
 	"github.com/gin-gonic/gin"
+	_ "GDColumn/docs"
+	gs "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/files"
 )
 
 func RegisterAPIRoutes(r *gin.Engine) {
@@ -16,6 +19,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	} else {
 		v1 = r.Group("/v1")
 	}
+	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	v1.Use(middlewares.LimitIP("200-H"))
 	{
 		authGroup := v1.Group("/auth")
@@ -58,7 +62,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		clcGroup := v1.Group("/columns")
 		{
 			clcGroup.GET("", clc.Index)
-			clcGroup.GET("/:id", clc.CurrentColumn)
+			clcGroup.GET("/:id", clc.ShowColumn)
 			clcGroup.POST("", middlewares.AuthJWT(), clc.Store)
 			clcGroup.PUT("", middlewares.AuthJWT(), clc.Update)
 			clcGroup.DELETE("/:id", middlewares.AuthJWT(), clc.Delete)

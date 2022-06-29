@@ -13,6 +13,12 @@ type UsersController struct {
     BaseAPIController
 }
 
+// CurrentUser 关于用户的路由，登录，注册，获取当前用户等等
+// @Summary 获取当前用户信息
+// @Tags user 关于用户的路由，登录，注册，获取当前用户等等
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Success 200 {object} user.User
+//@Router /current [GET]
 func (ctrl *UsersController) CurrentUser(c *gin.Context) {
     userModel := auth.CurrentUser(c)
     response.Data(c, userModel)
@@ -30,7 +36,13 @@ func (ctrl *UsersController) Index(c *gin.Context) {
         "pager": pager,
     })
 }
-
+// UpdateProfile 关于用户的路由，登录，注册，获取当前用户等等
+// @Summary 更新当前用户信息
+// @Tags user 关于用户的路由，登录，注册，获取当前用户等等
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param body body requests.UserUpdateProfileRequest true "待更新用户数据"
+// @Success 200 {object} user.User
+// @Router /users [PUT]
 func (ctrl *UsersController) UpdateProfile(c *gin.Context) {
 
     request := requests.UserUpdateProfileRequest{}

@@ -17,6 +17,17 @@ type PostsController struct {
     BaseAPIController
 }
 
+
+// Store 新建文章
+// @Summary 新建文章
+// @Description 需要标题、内容
+// @Tags post 关于文章的一些操作信息
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param body body requests.PostRequest true "新建文章，需要提供标题和内容"
+// @Success 200 {object} post.Post
+//@Router /posts [POST]
 func (ctrl *PostsController) Store(c *gin.Context) {
 
     request := requests.PostRequest{}
@@ -51,6 +62,16 @@ func (ctrl *PostsController) Store(c *gin.Context) {
     }
 }
 
+// Update 更新单个文章信息
+// @Summary 发送请求，更新单个文章信息
+// @Tags post 关于文章的一些操作信息
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param id path integer true "文章ID"
+// @Param body body requests.PostRequest true "待更新文章数据"
+// @Success 200 {object} post.Post
+//@Router /posts/{id} [PUT]
 func (ctrl *PostsController) Update(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
@@ -75,6 +96,15 @@ func (ctrl *PostsController) Update(c *gin.Context) {
     }
 }
 
+// Delete 删除个文章
+// @Summary 发送请求，删除单个文章
+// @Tags post 关于文章的一些操作信息
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param id path integer true "文章ID"
+// @Success 200 {object} post.Post
+//@Router /posts/{id} [DELETE]
 func (ctrl *PostsController) Delete(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
@@ -98,6 +128,13 @@ func (ctrl *PostsController) Delete(c *gin.Context) {
     response.Abort500(c, "删除失败，请稍后尝试~")
 }
 
+// Show 获取单个文章信息
+// @Summary 发送请求获取单个文章信息
+// @Description 文章ID
+// @Tags post 关于文章的一些操作信息
+// @Param id path integer true "文章ID"
+// @Success 200 {object} post.Post
+//@Router /posts/{id} [GET]
 func (ctrl *PostsController) Show(c *gin.Context) {
 
     postModel := post.Get(c.Param("id"))
@@ -116,6 +153,13 @@ func (ctrl *PostsController) Show(c *gin.Context) {
     response.Data(c, postModel)
 }
 
+// Index 获取属于专栏的文章信息
+// @Summary 发送请求获取属于专栏的文章信息
+// @Description 专栏ID
+// @Tags post 关于文章的一些操作信息
+// @Param id path integer true "专栏ID"
+// @Success 200 {object} post.Post
+// @Router /columns/{id}/posts [GET]
 func (ctrl *PostsController) Index(c *gin.Context) {
 
     postModel := post.GetAll(c.Param("id"))

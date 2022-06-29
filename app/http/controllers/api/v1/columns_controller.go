@@ -38,6 +38,15 @@ func (ctrl *ColumnsController) Store(c *gin.Context) {
     }
 }
 
+// Update 更新个人专栏信息
+// @Summary 发送请求，更新个人专栏信息
+// @Tags column 关于专栏的一些操作信息
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param body body requests.ColumnRequest true "待更新专栏数据"
+// @Success 200 {object} column.Column
+//@Router /columns/ [PUT]
 func (ctrl *ColumnsController) Update(c *gin.Context) {
 
     request := requests.ColumnRequest{}
@@ -55,7 +64,13 @@ func (ctrl *ColumnsController) Update(c *gin.Context) {
     }
 }
 
-func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
+// ShowColumn 发送请求-获取一个专栏详情
+// @Summary 发送请求，获取一个专栏详情
+// @Tags column 关于专栏的一些操作信息
+// @Param id path integer true "专栏ID"
+// @Success 200 {object} column.Column
+//@Router /columns/{id} [GET]
+func (ctrl *ColumnsController) ShowColumn(c *gin.Context) {
 
     columnModel := column.Get(c.Param("id"))
     switch {
@@ -78,6 +93,14 @@ func (ctrl *ColumnsController) CurrentColumn(c *gin.Context) {
     }
 }
 
+// Index 获取专栏列表
+// @Summary 发送请求，获得专栏列表
+// @Tags column 关于专栏的一些操作信息
+// @Accept application/json
+// @Produce application/json
+// @Param object query requests.PaginationRequest false "查询参数"
+// @Success 200 {object} column.Column
+//@Router /columns [GET]
 func (ctrl *ColumnsController) Index(c *gin.Context) {
 
     //request := requests.PaginationRequest{}

@@ -15,6 +15,13 @@ type ImagesController struct {
     BaseAPIController
 }
 
+// Upload 上传文件
+// @Summary 上传文件
+// @Description 专栏ID
+// @Tags file 关于文件上传的一些操作信息
+// @Param file formData file true "文件"
+// @Success 200 {object} image.Image
+// @Router /upload [POST]
 func (ctrl *ImagesController) Upload(c *gin.Context) {
 
     request := requests.ImageRequest{}

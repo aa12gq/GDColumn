@@ -47,10 +47,10 @@ func SaveUploadImage(id string, c *gin.Context, file *multipart.FileHeader) (ava
 
 	pwd,_ := os.Getwd()
 	imgPwd := fmt.Sprintf("%v/%v%v%v%v",pwd,publicPath,dirName,id,path.Ext(file.Filename))
-	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("exampledir/%v%v",id,".jpg"),
+	err = aliyun.Bucket.PutObjectFromFile(fmt.Sprintf("AA12/%v%v",id,".jpg"),
 		imgPwd,oss.ContentType("image/jpg"));
 	os.Remove(imgPwd)
-	return fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/exampledir/%v%v",id,".jpg"), err
+	return fmt.Sprintf("https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/%v%v",id,".jpg"), err
 }
 
 func randomNameFromUploadFile(file *multipart.FileHeader) string {

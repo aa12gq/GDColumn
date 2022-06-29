@@ -15,6 +15,21 @@ import (
 func init() {
 	btsConfig.Initialize()
 }
+// @title 仿知乎专栏后端API
+// @version 1.0
+// @description GDColumn是一个基于 Gin 框架搭建的防知乎专栏后端 API。
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name AA12
+// @contact.url https://qm.qq.com/cgi-bin/qm/qr?k=qjar90G1gAtMF6uR7-8WLk5OvpD7sjUj&noverify=0
+// @contact.email 875151567@qq.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:3000
+// @BasePath /api/v1
+// @schemes http https
 
 func main() {
 

@@ -72,6 +72,15 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 	}
 }
 
+// SignupUsingEmail 注册用户
+// @Summary 注册用户
+// @Description 需要用户名密码
+// @Tags user 关于用户的路由，登录，注册，获取当前用户等等
+// @Accept application/json
+// @Produce application/json
+// @Param body body requests.SignupUsingEmailRequest true "用户注册，需要提供用户的邮箱和密码"
+// @Success 200 {object} user.User
+//@Router /auth/signup/using-email [POST]
 func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 
 	request := requests.SignupUsingEmailRequest{}
