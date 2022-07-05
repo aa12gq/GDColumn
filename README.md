@@ -104,6 +104,19 @@ TOTAL                          125           1028            587           6350
 
 \- 后端 API 查询站点：[http://bitepig.aa12.cool/swagger/index.html](http://bitepig.aa12.cool/swagger/index.html)
 
-**## 演示信息**
+\- 后端 API 文档：[https://console-docs.apipost.cn/preview/1a17e8f373c5342d/93ea07fcf026e7e6)
 
-账号密码: test@test.com / 123456
+**## 项目演示**
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877809319149569.jpg)
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877839367143425.jpg)
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877366736191489.jpg)
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877455789654017.jpg)
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877760161906689.jpg)
+
+![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877786770571265.jpg)
+
