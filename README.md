@@ -1,6 +1,60 @@
-### 『仿知乎专栏』项目是高仿知乎专栏的后端项目，基于 Gin 框架从零到一到上线
+<div align="center">
+<h1>GD Column</h1>
 
-### 所有路由
+[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
+[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
+[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
+[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
+[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
+[![HitCount](https://views.whatilearened.today/views/github/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin)
+[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/blob/main/LICENSE)
+
+<p> 🌉 基于Go+Vue实现的仿知乎专栏项目 🌉</p>
+
+<img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
+</div><br>
+
+<p align="center">
+  <a href="" rel="noopener">
+   <img src="https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877366736191489.jpg" alt="Project logo"></a>
+</p>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**目录**
+
+- [🏊 在线体验](#-%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C)
+- [👨‍💻 项目地址](#-%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80)
+- [🥰 感谢](#-%E6%84%9F%E8%B0%A2)
+- [🤗 另外](#-%E5%8F%A6%E5%A4%96)
+- [⚡ 加群](#-%E5%8A%A0%E7%BE%A4)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+## 🏊 在线体验
+
+提供在线体验地址如下：
+
+|     分类      |                             地址                             |          用户名           | 密码   |
+| :-----------: | :----------------------------------------------------------: | :-----------------------: | ------ |
+| bitepig-column | [http://bitepig.aa12.cool) |           admin           | 123456 |
+
+**页面功能概览：**
+
+| ![登录页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877809319149569.jpg) | ![首页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877366736191489.jpg) |
+| :----------------------------------------------------------: | ------------------------------------------------------------ |
+| ![文章列表页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877455789654017.jpg) | ![文章详情页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877760161906689.jpg) 
+
+## 👨‍💻 项目地址
+
+| 分类 |                        GitHub                        
+| :--: | :--------------------------------------------------: 
+| 后端 | https://github.com/AA12GQ/GDColumn   
+| 前端 | https://github.com/AA12GQ/bitepig-column 
+
+### 🔗所有路由
 
 | 请求方法 | API 地址                                | 说明                        |
 | -------- | --------------------------------------- | --------------------------- |
@@ -97,26 +151,3 @@ SQL                              1              0              1              1
 TOTAL                          125           1028            587           6350
 -------------------------------------------------------------------------------
 ```
-
-
-
-\- ***\*前端演示站点：[**http://bitepig.aa12.cool/*]**(http://bitepig.aa12.cool/)***\***
-
-\- 后端 API 查询站点：[http://bitepig.aa12.cool/swagger/index.html](http://bitepig.aa12.cool/swagger/index.html)
-
-\- 后端 API 文档：[https://console-docs.apipost.cn/preview/1a17e8f373c5342d/93ea07fcf026e7e6)
-
-**## 项目演示**
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877809319149569.jpg)
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877839367143425.jpg)
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877366736191489.jpg)
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877455789654017.jpg)
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877760161906689.jpg)
-
-![image](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877786770571265.jpg)
-
