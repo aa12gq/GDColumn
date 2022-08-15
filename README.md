@@ -1,15 +1,15 @@
 <div align="center">
 <h1>GD Column</h1>
 
-[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf-world/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin)
-[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/eryajf/go-ldap-admin)
-[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/eryajf/go-ldap-admin)
-[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/pulls)
-[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/stargazers)
-[![HitCount](https://views.whatilearened.today/views/github/eryajf/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin)
-[![GitHub license](https://img.shields.io/github/license/eryajf/go-ldap-admin)](https://github.com/eryajf/go-ldap-admin/blob/main/LICENSE)
+[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/AA12GQ)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn)
+[![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/AA12GQ/GDColumn)
+[![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/AA12GQ/GDColumn)
+[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/AA12GQ/GDColumn)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/pulls)
+[![GitHub Pull Requests](https://img.shields.io/github/stars/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/stargazers)
+[![HitCount](https://views.whatilearened.today/views/github/AA12GQ/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin)
+[![GitHub license](https://img.shields.io/github/license/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/blob/main/LICENSE)
 
 <p> 🌉 基于Go+Vue实现的仿知乎专栏项目 🌉</p>
 
@@ -22,13 +22,11 @@
 </p>
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **目录**
 
 - [🏊 在线体验](#-%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C)
-- [👨‍💻 项目地址](#-%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80)
-- [🥰 感谢](#-%E6%84%9F%E8%B0%A2)
-- [🤗 另外](#-%E5%8F%A6%E5%A4%96)
-- [⚡ 加群](#-%E5%8A%A0%E7%BE%A4)
+- [👨‍💻 项目地址](#-%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80))
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -39,7 +37,7 @@
 
 |     分类      |                             地址                             |          用户名           | 密码   |
 | :-----------: | :----------------------------------------------------------: | :-----------------------: | ------ |
-| bitepig-column | [http://bitepig.aa12.cool) |           admin           | 123456 |
+| bitepig-column | http://bitepig.aa12.cool |           admin           | 123456 |
 
 **页面功能概览：**
 
