@@ -39,6 +39,15 @@
 | :-----------: | :----------------------------------------------------------: | :-----------------------: | ------ |
 | bitepig-column | http://bitepig.aa12.cool |           admin           | 123456 |
 
+## 🏊 API文档
+
+提供在线体验地址如下：
+
+|     分类      |                             地址                             |
+| :-----------: | :----------------------------------------------------------: 
+| Swagger API | http://bitepig.aa12.cool/swagger/index.html | 
+| ApiPost API | https://console-docs.apipost.cn/preview/1a17e8f373c5342d/93ea07fcf026e7e6 | 
+
 **页面功能概览：**
 
 | ![登录页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877809319149569.jpg) | ![首页](https://bitpig-column.oss-cn-hangzhou.aliyuncs.com/AA12/132877366736191489.jpg) |
