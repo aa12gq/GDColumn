@@ -1,14 +1,14 @@
 <div align="center">
 <h1>GD Column</h1>
 
-[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/AA12GQ)
+[![Auth](https://img.shields.io/badge/Auth-AA12GQ-ff69b4)](https://github.com/AA12GQ)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn)
 [![Gin Version](https://img.shields.io/badge/Gin-1.6.3-brightgreen)](https://github.com/AA12GQ/GDColumn)
 [![Gorm Version](https://img.shields.io/badge/Gorm-1.20.12-brightgreen)](https://github.com/AA12GQ/GDColumn)
-[![GitHub Issues](https://img.shields.io/github/issues/eryajf/go-ldap-admin.svg)](https://github.com/AA12GQ/GDColumn)
+[![GitHub Issues](https://img.shields.io/github/issues/AA12GQ/GDColumn.svg)](https://github.com/AA12GQ/GDColumn)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/stargazers)
-[![HitCount](https://views.whatilearened.today/views/github/AA12GQ/go-ldap-admin.svg)](https://github.com/eryajf/go-ldap-admin)
+[![HitCount](https://views.whatilearened.today/views/github/AA12GQ/GDColumn.svg)](https://github.com/AA12GQ/GDColumn)
 [![GitHub license](https://img.shields.io/github/license/AA12GQ/GDColumn)](https://github.com/AA12GQ/GDColumn/blob/main/LICENSE)
 
 <p> 🌉 基于Go+Vue实现的仿知乎专栏项目 🌉</p>
@@ -26,7 +26,7 @@
 **目录**
 
 - [🏊 在线体验](#-%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C)
-- [👨‍💻 项目地址](#-%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80))
+- [👨‍💻 项目地址](#-%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
